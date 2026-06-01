@@ -194,7 +194,8 @@ export default function SignIn() {
               <div style={{ marginBottom: "12px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
                   <label style={{ ...labelStyle, marginBottom: 0 }}>Password</label>
-                  <span onClick={() => alert("Forgot Password functionality coming soon!")} className="action-link" style={{ color: "#64748b", fontWeight: "500" }}>Forgot Password?</span>
+                  {/* ── මෙතනින් Forgot Password පේජ් එකට Navigate වෙනවා ── */}
+                  <span onClick={() => navigate("/forgot")} className="action-link" style={{ color: "#64748b", fontWeight: "500" }}>Forgot Password?</span>
                 </div>
                 <div style={{ position: "relative" }}>
                   <input

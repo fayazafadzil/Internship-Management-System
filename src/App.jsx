@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./HomePage";
 import SignUp from "./signup"; 
-import SignIn from "./Login"; // 👈 මෙන්න මෙතනින් Login.jsx එක සම්බන්ධ කළා
+import SignIn from "./Login"; 
+import Forgot from "./Forgot"; // 👈 අලුතින් Forgot Password පේජ් එක මෙතනින් Import කලා
 
 export default function App() {
   return (
@@ -9,7 +10,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<SignIn />} /> {/* 👈 ප්ලේස්හෝල්ඩර් එක වෙනුවට SignIn එක දැම්මා */}
+        <Route path="/login" element={<SignIn />} /> 
+        
+        {/* 👈 Forgot Password පේජ් එක සඳහා Route එක සම්බන්ධ කලා */}
+        <Route path="/forgot" element={<Forgot />} /> 
       </Routes>
     </Router>
   );
