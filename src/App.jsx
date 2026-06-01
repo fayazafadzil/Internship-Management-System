@@ -1,20 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./HomePage";
-import SignUp from "./signup"; 
-import SignIn from "./Login"; 
-import Forgot from "./Forgot"; // 👈 අලුතින් Forgot Password පේජ් එක මෙතනින් Import කලා
+import IMSManagementHub from "./Overview"; 
 
-export default function App() {
+function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<SignIn />} /> 
-        
-        {/* 👈 Forgot Password පේජ් එක සඳහා Route එක සම්බන්ධ කලා */}
-        <Route path="/forgot" element={<Forgot />} /> 
-      </Routes>
-    </Router>
+    <div>
+      <IMSManagementHub />
+    </div>
   );
 }
+
+export default App;
