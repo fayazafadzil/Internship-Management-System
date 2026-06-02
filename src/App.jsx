@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import IMSInternshipTracker from "./Internshipstatus";
-
-export default function App() {
-  return <IMSInternshipTracker />;
-}
-=======
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./HomePage";
 import SignUp from "./signup"; 
@@ -22,4 +15,3 @@ export default function App() {
     </Router>
   );
 }
->>>>>>> 8fb16fabf7b6d7f3147e3106a54947b9f756f499
