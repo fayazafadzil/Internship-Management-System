@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowLeft, MailCheck } from "lucide-react";
+import { ArrowLeft, GraduationCap, MailCheck } from "lucide-react";
 import { Footer } from "@/components/layout/Footer";
-import { Field, Input } from "@/components/ui/Field";
-import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Field";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -13,14 +12,12 @@ export default function StudentForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [resetLink, setResetLink] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
     setSuccessMessage(null);
-    setResetLink(null);
 
     const trimmedEmail = email.trim();
     if (!trimmedEmail || !emailRegex.test(trimmedEmail)) {
@@ -53,53 +50,87 @@ export default function StudentForgotPasswordPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-sky-soft">
-      <div className="mx-auto w-full max-w-md px-6 py-10">
-        <div className="mb-6">
+    <div className="flex min-h-screen flex-col justify-between bg-[#AEC0D4] relative">
+      
+      {/* Upper Area containing Back Button & Form Card */}
+      <div className="flex flex-col justify-center items-center px-4 py-12 sm:px-6 lg:px-8 relative flex-1">
+        
+        {/* Back to Login Link - Top Left Corner */}
+        <div className="absolute top-4 left-4 md:left-8">
           <Link
             href="/student/login"
-            className="inline-flex items-center text-sm font-medium text-navy-deep hover:underline"
+            className="flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-navy-deep transition-colors"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
+            <ArrowLeft className="h-3.5 w-3.5" />
             Back to Login
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-3xl shadow-2xl ring-1 ring-navy-deep/10">
-          <div className="bg-navy-deep px-10 py-10 text-center text-white">
-            <h1 className="text-3xl font-semibold">Forgot your Password?</h1>
-            <p className="mt-3 text-sm text-white/75">
+        {/* Card Container */}
+        <div className="w-full max-w-sm overflow-hidden bg-white shadow-2xl rounded-2xl border-none my-auto">
+          
+          {/* Header Section with Dark Blue Gradient */}
+          <div className="bg-gradient-to-b from-[#1e3a63] to-[#132540] px-6 py-8 text-center text-white rounded-t-2xl">
+            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md ring-1 ring-white/20">
+              <GraduationCap className="h-5 w-5 text-white/95" />
+            </div>
+
+            <h1 className="text-lg font-bold tracking-wide">
+              Forgot your Password?
+            </h1>
+            <p className="mt-1 text-[11px] text-white/70 font-medium leading-relaxed max-w-[280px] mx-auto">
               Enter your university email to recover your account.
             </p>
           </div>
 
-          <div className="bg-panel px-10 py-10">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <Field label="University Email" htmlFor="email">
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="student@university.ruh.ac.lk"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Field>
+          {/* Form Section */}
+          <div className="p-6 md:p-8 bg-white">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              
+              {/* Email Input Field */}
+              <div className="space-y-1">
+                <label htmlFor="email" className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                  University Email
+                </label>
 
-              {error && <p className="text-sm text-red-600">{error}</p>}
+                <div className="overflow-hidden rounded-xl bg-white border border-slate-200 focus-within:border-navy focus-within:ring-2 focus-within:ring-navy/10 transition-all shadow-sm [&_input]:bg-transparent [&_input]:border-none [&_input]:outline-none">
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="student@university.ruh.ac.lk"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400"
+                  />
+                </div>
+              </div>
 
-              <Button type="submit" className="w-full py-3.5" disabled={loading}>
+              {/* Error Message */}
+              {error && (
+                <div className="bg-rose-50 p-2.5 border-l-4 border-rose-500 rounded-r-xl">
+                  <p className="text-[11px] font-semibold text-rose-700 leading-tight">{error}</p>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl bg-gradient-to-r from-[#1e3a63] to-[#132540] py-3 text-xs font-bold text-white uppercase tracking-wider transition-all hover:opacity-95 shadow-md active:scale-[0.99] mt-2 disabled:opacity-50"
+              >
                 {loading ? "Sending reset link..." : "Send Reset Link"}
-              </Button>
+              </button>
             </form>
 
+            {/* Success Banner */}
             {successMessage && (
-              <div className="mt-6 rounded-3xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700 shadow-sm">
-                <div className="flex items-start gap-3">
-                  <MailCheck className="mt-0.5 h-5 w-5 text-emerald-600" />
+              <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-700 shadow-sm">
+                <div className="flex items-start gap-2.5">
+                  <MailCheck className="mt-0.5 h-4 w-4 text-emerald-600 shrink-0" />
                   <div>
-                    <p className="font-semibold">Password reset email sent</p>
-                    <p className="mt-1 text-sm leading-relaxed text-emerald-700/90">
+                    <p className="font-bold">Password reset email sent</p>
+                    <p className="mt-0.5 text-[11px] leading-relaxed text-emerald-700/90">
                       {successMessage}
                     </p>
                   </div>
@@ -107,16 +138,20 @@ export default function StudentForgotPasswordPage() {
               </div>
             )}
 
-            <div className="mt-6 rounded-3xl bg-slate-100 px-5 py-4 text-sm text-slate-700">
-              <p className="font-semibold text-slate-900">Need assistance?</p>
-              <p className="mt-2 leading-relaxed">
-                If you don't see the message, please check your spam folder or check your backend logs.
+            {/* Assistance Box */}
+            <div className="mt-4 rounded-xl bg-slate-50 p-3 text-[11px] text-slate-600 border border-slate-100">
+              <p className="font-bold text-slate-800">Need assistance?</p>
+              <p className="mt-1 leading-relaxed text-slate-500">
+                If you don't see the message, please check your spam folder or contact support.
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Footer stays at bottom properly */}
       <Footer />
-    </main>
+    </div>
   );
 }
+
