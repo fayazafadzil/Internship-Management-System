@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,7 +17,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [, setFailedAttempts] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,128 +61,150 @@ function LoginForm() {
     }
   };
 
-
   return (
-    <div className="grid flex-1 lg:grid-cols-2">
-      {/* Visual side */}
-      <div className="relative hidden min-h-[260px] lg:block overflow-hidden">
-        <Image
-          src="/home.png" 
-          alt="Home Background"
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="absolute bottom-8 left-8 text-white/70 z-10">
-          <p className="text-sm font-semibold">Internship Management System</p>
-          <p className="text-xs text-white/50">University of Ruhuna</p>
-        </div>
-      </div>
-
-      {/* Form side */}
-      <div className="flex items-center justify-center bg-teal px-8 py-16 text-white">
-        <div className="w-full max-w-md">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold">IMS</h1>
-            <p className="mt-1 text-sm uppercase tracking-[0.3em] text-white/60">
-              University System
-            </p>
+    <div className="flex min-h-screen flex-col justify-between bg-[#AEC0D4]">
+      {/* Content Wrapper */}
+      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        
+        {/* Main Card Container (Square Corners - rounded-none) */}
+        <div className="mx-auto flex w-full max-w-4xl overflow-hidden rounded-none bg-white shadow-2xl">
+          
+          {/* Left Side: Image */}
+          <div className="relative hidden w-1/2 bg-[#1B4472] md:block">
+            <Image
+              src="/login1.jpeg"
+              alt="University of Ruhuna"
+              fill
+              priority
+              className="object-cover opacity-90 rounded-none"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 to-transparent p-8 text-white rounded-none">
+              <p className="text-sm font-bold tracking-wide">Internship Management System</p>
+              <p className="mt-1 text-xs text-white/60">University of Ruhuna</p>
+            </div>
           </div>
 
-          <p className="mt-10 text-center text-white/80">
-                Sign in with your university credentials to access the Internship
-                Management System
+          {/* Right Side: Form Content */}
+          <div className="w-full px-8 py-10 md:w-1/2 md:px-12 md:py-12 flex flex-col justify-center">
+            
+            {/* Title Section */}
+            <div className="text-center">
+              <h1 className="text-3xl font-extrabold tracking-tight text-[#1B4472]">IMS</h1>
+              <p className="mt-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-[#1B4472]/60">
+                University System
               </p>
+            </div>
 
-              <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-                <div>
-                  <label htmlFor="email" className="mb-1.5 block text-sm font-semibold">
-                    University Email
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="e.g. student@university.ruh.ac.lk"
-                    required
-                    className="w-full rounded-lg border border-white/40 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-periwinkle/60"
-                  />
-                </div>
+            <p className="mt-6 text-center text-xs leading-relaxed text-slate-500">
+              Sign in with your university credentials to access the Internship Management System.
+            </p>
 
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="mb-1.5 block text-sm font-semibold"
-                  >
+            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+              
+              {/* Email Field */}
+              <div>
+                <label htmlFor="email" className="mb-1.5 block text-xs font-bold text-slate-700">
+                  University Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="student@university.ruh.ac.lk"
+                  required
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#1B4472] focus:outline-none focus:ring-2 focus:ring-[#1B4472]/10 transition-all shadow-sm"
+                />
+              </div>
+
+              {/* Password Field */}
+              <div>
+                <div className="mb-1.5">
+                  <label htmlFor="password" className="mb-1.5 block text-xs font-bold text-slate-700">
                     Password
                   </label>
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-slate-50/50 focus-within:border-[#1B4472] focus-within:ring-2 focus-within:ring-[#1B4472]/10 transition-all shadow-sm [&_input]:rounded-xl">
                   <PasswordInput
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
-                  <div className="mt-2 flex justify-end">
-                    <Link
-                      href="/student/forgot-password"
-                      className="text-sm font-medium text-white/80 transition hover:text-white"
-                    >
-                      Forgot Password?
-                    </Link>
-                  </div>
                 </div>
 
-                <label className="flex items-center gap-2 text-sm text-white/80">
-                  <input
-                    type="checkbox"
-                    checked={remember}
-                    onChange={(e) => setRemember(e.target.checked)}
-                    className="h-4 w-4 rounded border-white/40 accent-periwinkle"
-                  />
-                  Remember Me
-                </label>
-
-                {error && <p className="text-sm text-red-300">{error}</p>}
-
-                <button
-                  type="submit"
-                  className="w-full rounded-lg bg-periwinkle py-3.5 text-sm font-bold text-navy-deep transition-colors hover:bg-periwinkle/90"
-                >
-                  Login
-                </button>
-              </form>
-
-              <div className="mt-8 text-center space-y-3">
-                <p className="text-sm text-white/70">
-                  Don&apos;t have an account?{" "}
+                <div className="mt-2 text-right">
                   <Link
-                    href="/student/auth"
-                    className="font-semibold text-white hover:underline"
+                    href="/student/forgot-password"
+                    className="text-xs font-bold text-[#1B4472] hover:underline transition-colors"
                   >
-                    Register here
+                    Forgot Password?
                   </Link>
-                </p>
+                </div>
               </div>
+
+              {/* Remember Me */}
+              <label className="flex items-center gap-2.5 text-xs font-semibold text-slate-600 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-[#1B4472] focus:ring-[#1B4472]/20 accent-[#1B4472]"
+                />
+                Remember Me
+              </label>
+
+              {/* Error Message */}
+              {error && (
+                <div className="rounded-xl bg-rose-50 p-3 border border-rose-100">
+                  <p className="text-xs font-semibold text-rose-600">{error}</p>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full rounded-xl bg-[#1B4472] py-3 text-sm font-bold text-white transition-all hover:bg-[#1B4472]/90 shadow-md active:scale-[0.99]"
+              >
+                Login
+              </button>
+            </form>
+
+            {/* Footer Link */}
+            <div className="mt-6 text-center">
+              <p className="text-xs text-slate-500">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/student/auth"
+                  className="font-bold text-[#1B4472] hover:underline transition-colors"
+                >
+                  Register here
+                </Link>
+              </p>
+            </div>
+
+          </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
 
 export default function StudentLoginPage() {
   return (
-    <>
-      <Suspense
-        fallback={
-          <div className="flex flex-1 items-center justify-center bg-teal text-white">
-            Loading…
-          </div>
-        }
-      >
-        <LoginForm />
-      </Suspense>
-      <Footer />
-    </>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen flex-1 items-center justify-center bg-[#AEC0D4] text-[#1B4472]">
+          <div className="text-sm font-bold tracking-widest uppercase animate-pulse">Loading…</div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
+
+

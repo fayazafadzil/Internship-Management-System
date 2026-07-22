@@ -1,12 +1,13 @@
 import {
   GraduationCap,
   Building2,
-  UserPlus,
   TrendingUp,
   BookOpen,
   FileText,
   ShieldCheck,
   Lock,
+  ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import { LandingNav } from "@/components/layout/LandingNav";
 import { Footer } from "@/components/layout/Footer";
@@ -14,24 +15,28 @@ import { LinkButton } from "@/components/ui/Button";
 
 const features = [
   {
-    icon: UserPlus,
-    title: "Automated Registration",
-    body: "Self-service onboarding for companies and students with automated document verification and academic eligibility checks.",
+    icon: ShieldCheck,
+    title: "Department Verification & Approval",
+    body: "Verify student registrations, approve accounts, and manage internship-related approvals through a secure department portal.",
+    bgColor: "bg-[#1B4472]/90 hover:bg-[#16385F]",
   },
   {
     icon: TrendingUp,
-    title: "GPA-based Recommendations",
-    body: "Our intelligent algorithm matches students to elite opportunities based on academic performance and skill relevance.",
+    title: "Academic Performance",
+    body: "Monitor your academic performance by viewing your GPA, semester results, and overall academic progress in one place.",
+    bgColor: "bg-[#1B4472]/90 hover:bg-[#16385F]",
   },
   {
     icon: BookOpen,
     title: "Digital Record Book",
-    body: "Real-time logging of internship evolution with digital supervisor signatures and university review.",
+    body: "Track internship progress with real-time digital logs and organized activity records.",
+    bgColor: "bg-[#1B4472]/90 hover:bg-[#16385F]",
   },
   {
     icon: FileText,
     title: "Efficient Reporting",
-    body: "Generate comprehensive evaluation reports and internship completion certificates with a single click.",
+    body: "Generate insightful evaluation reports to track student performance and internship progress efficiently.",
+    bgColor: "bg-[#1B4472]/90 hover:bg-[#16385F]",
   },
 ];
 
@@ -43,83 +48,113 @@ export default function Home() {
       {/* Hero */}
       <section
         id="overview"
-        className="text-white"
+        className="text-white relative overflow-hidden"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(15,32,67,0.85), rgba(15,32,67,0.85)), url('/intern.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+            "linear-gradient(rgba(11,21,40,0.45), rgba(11,21,40,0.82)), url('/intern.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="mx-auto max-w-5xl px-6 py-20 text-center">
-          <h1 className="text-4xl font-bold leading-tight sm:text-5xl md:text-6xl">
-            Welcome to the Internship Management System
+        <div className="mx-auto max-w-6xl px-6 py-28 text-center relative z-10">
+          {/* Top Badge with Department Name */}
+          <div className="inline-flex items-center gap-2.5 rounded-full bg-blue-500/15 border border-sky-300/30 px-5 py-1.5 text-xs font-bold uppercase tracking-widest text-sky-200 mb-8 backdrop-blur-md shadow-lg shadow-black/10">
+            <ShieldCheck className="h-4 w-4 text-sky-300" />
+            Department of Computer Science • University of Ruhuna
+          </div>
+
+          <h1 className="text-4xl font-black tracking-normal text-[#EDF4FC] drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)] leading-[1.18] sm:text-5xl md:text-6xl max-w-4xl mx-auto">
+            Internship Management System
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base text-white/80 sm:text-lg">
-            A unified platform connecting students, departments, and industry
-            partners to streamline every step of the internship journey.
+
+          <p className="mx-auto mt-8 max-w-2xl text-base text-slate-200 sm:text-lg sm:leading-relaxed font-semibold tracking-wide">
+            A centralized platform for managing internship activities, academic performance, digital record books, and departmental workflows
           </p>
 
-          <div className="mx-auto mt-12 grid max-w-3xl gap-6 md:grid-cols-2">
+          <div className="mx-auto mt-16 grid max-w-3xl gap-8 md:grid-cols-2">
             <PortalCard
-              icon={<GraduationCap className="h-6 w-6 text-navy" />}
+              icon={<GraduationCap className="h-8 w-8 text-sky-100" />}
               title="Student Portal"
-              body="Register as a student to apply for internships, track your placements, and maintain your digital record book."
+              body="Access your academic profile, log daily internship progress, and track performance seamlessly."
               cta="Get Started"
               href="/student/auth"
-              variant="primary"
+              iconBgColor="bg-sky-500/30 border border-sky-200/40"
+              cardBg="bg-[#3b5982]/60 backdrop-blur-xl border border-sky-100/30 hover:border-sky-300/80 hover:bg-[#436593]/75"
+              buttonVariant="primary"
+              buttonClassName="bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-500 hover:to-blue-400 font-semibold py-3 transition-all shadow-lg shadow-blue-950/50 tracking-wide"
             />
+
             <PortalCard
-              icon={<Building2 className="h-6 w-6 text-navy" />}
+              icon={<Building2 className="h-8 w-8 text-white" />}
               title="Department Portal"
-              body="Manage student placements, oversee internal approvals, and monitor the overall internship program success."
+              body="Manage student placements, verify registrations, track GPAs, and oversee program evaluations."
               cta="Login"
               href="/department/auth"
-              variant="dark"
+              iconBgColor="bg-slate-400/30 border border-slate-200/30"
+              cardBg="bg-[#406392]/60 backdrop-blur-xl border border-sky-100/25 hover:border-sky-300/80 hover:bg-[#4a70a3]/75"
+              buttonVariant="dark"
+              buttonClassName="bg-[#0D1B2A] text-white hover:bg-[#14283E] font-semibold py-3 transition-all border border-sky-300/30 shadow-md tracking-wide"
             />
           </div>
         </div>
       </section>
 
-      {/* Trust bar */}
-      <section className="bg-sky-soft">
-        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-6 py-5 text-sm text-navy-deep/80">
-          <span className="font-medium">Trusted By</span>
-          <span className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-amber-500" />
+      {/* Trust Bar */}
+      <section className="bg-[#A7BFDB] border-y border-[#8AA3C2] shadow-sm">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-6 py-5 text-sm text-[#0B1A33] font-semibold tracking-wide">
+          <span className="font-extrabold text-xs uppercase tracking-widest text-[#1B4472]">OFFICIAL PORTAL</span>
+
+          <span className="flex items-center gap-2.5">
+            <ShieldCheck className="h-4.5 w-4.5 text-[#1B4472]" />
+            Department of Computer Science
+          </span>
+
+          <span className="hidden text-[#1B4472]/30 sm:inline">|</span>
+
+          <span className="flex items-center gap-2.5">
             University of Ruhuna
           </span>
-          <span className="hidden text-navy-deep/30 sm:inline">|</span>
-          <span className="flex items-center gap-2">
-            <Lock className="h-4 w-4" />
-            Secure Portal
+
+          <span className="hidden text-[#1B4472]/30 sm:inline">|</span>
+
+          <span className="flex items-center gap-2.5">
+            <Lock className="h-4.5 w-4.5 text-[#1B4472]" />
+            Secure & Encrypted Portal
           </span>
         </div>
       </section>
 
       {/* Features */}
-      <section className="bg-feature-bg">
-        <div className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="text-center text-3xl font-bold text-navy-deep">
-            Centralized Internship process
+      <section className="bg-[#22364D] border-b border-[#18283B]">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          <h2 className="text-center text-3xl font-extrabold text-white tracking-normal sm:text-4xl">
+            Centralized Internship Process
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-navy-deep/70">
-            Streamlining collaboration between all stakeholders with an
-            integrated, data-driven platform.
+
+          <p className="mx-auto mt-4 max-w-2xl text-center text-[#D2E0F3] text-sm sm:text-base font-light leading-relaxed tracking-wide">
+            Connecting students and departments through an integrated platform for efficient academic and internship management
           </p>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map(({ icon: Icon, title, body }) => (
+          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {features.map(({ icon: Icon, title, body, bgColor }) => (
               <div
                 key={title}
-                className="rounded-xl border-t-4 border-navy-deep bg-white/60 p-5 shadow-sm backdrop-blur"
+                className={`group rounded-2xl border border-white/10 ${bgColor} p-7 shadow-xl transition-all duration-300 ease-out hover:scale-[1.03] hover:-translate-y-2 hover:shadow-2xl hover:border-sky-300/40 flex flex-col justify-between`}
               >
-                <Icon className="h-6 w-6 text-navy-deep" />
-                <h3 className="mt-4 font-semibold text-navy-deep">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-navy-deep/70">
-                  {body}
-                </p>
+                <div>
+                  <div className="p-3 rounded-xl bg-sky-400/15 border border-sky-300/30 w-fit shadow-inner">
+                    <Icon className="h-6 w-6 text-sky-300 transition-colors duration-300 group-hover:text-white" />
+                  </div>
+
+                  <h3 className="mt-6 font-bold text-white text-base tracking-snug leading-snug">
+                    {title}
+                  </h3>
+
+                  <p className="mt-3 text-xs leading-relaxed text-[#CBDCEF] font-normal tracking-wide">
+                    {body}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -127,25 +162,38 @@ export default function Home() {
       </section>
 
       {/* Gateway */}
-      <section className="bg-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-2">
-          <div>
-            <h2 className="text-3xl font-bold text-navy-deep sm:text-4xl">
-              Your gateway to professional excellence.
+      <section className="bg-[#18283B] text-white">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-24 md:grid-cols-2">
+          <div className="space-y-6">
+            <span className="text-xs font-bold uppercase tracking-widest text-sky-400 bg-sky-950/60 border border-sky-800/50 px-3 py-1 rounded-md">
+              Streamlined Workflow
+            </span>
+            
+            <h2 className="text-3xl font-extrabold text-white sm:text-4xl leading-tight tracking-normal">
+              Your gateway to professional excellence
             </h2>
-            <p className="mt-6 leading-relaxed text-foreground/70">
-              Empowering departments to oversee and manage internship programs
-              with ease. Our Student Internship Management System simplifies
-              internship tracking, record management, progress monitoring, and
-              communication, ensuring a smooth internship experience for
-              students.
+
+            <p className="leading-relaxed text-slate-300/90 text-sm sm:text-base font-light tracking-wide">
+              Empowering the Department of Computer Science to manage internship programs efficiently through a centralized platform. The system simplifies student verification, account management, academic performance tracking, internship approvals, and digital record book management.
             </p>
-            <div className="mt-8">
-              <LinkButton href="/student/auth">Get Started</LinkButton>
+
+            <div className="pt-2">
+              <LinkButton 
+                href="/student/auth" 
+                className="bg-[#1B4472] text-white hover:bg-[#16385F] font-semibold px-7 py-3.5 rounded-xl shadow-lg transition-all inline-flex items-center gap-2.5 border border-sky-400/30 hover:border-sky-300 tracking-wide"
+              >
+                Get Started
+              </LinkButton>
             </div>
           </div>
-          <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl shadow-lg">
-            <img src="/analytics.jpg" alt="Analytics" className="h-full w-full object-cover" />
+
+          {/* Smooth Zoom Image Container */}
+          <div className="group flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-slate-900 shadow-2xl ring-1 ring-white/10">
+            <img
+              src="/login.jpeg"
+              alt="Analytics"
+              className="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+            />
           </div>
         </div>
       </section>
@@ -161,27 +209,43 @@ function PortalCard({
   body,
   cta,
   href,
-  variant,
+  iconBgColor,
+  cardBg,
+  buttonVariant,
+  buttonClassName,
 }: {
   icon: React.ReactNode;
   title: string;
   body: string;
   cta: string;
   href: string;
-  variant: "primary" | "dark";
+  iconBgColor: string;
+  cardBg: string;
+  buttonVariant: "primary" | "dark";
+  buttonClassName?: string;
 }) {
   return (
-    <div className="flex flex-col rounded-2xl bg-white/95 p-7 text-left text-foreground shadow-lg">
-      <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-sky-soft">
+    <div className={`group flex flex-col rounded-2xl ${cardBg} p-9 text-left transition-all duration-300 ease-out hover:-translate-y-2 shadow-2xl hover:shadow-sky-500/10`}>
+      <div className={`mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl ${iconBgColor} shadow-inner transition-transform duration-300 group-hover:scale-105`}>
         {icon}
       </div>
-      <h3 className="text-center text-xl font-bold text-navy-deep">{title}</h3>
-      <p className="mt-3 text-center text-sm leading-relaxed text-foreground/70">
+
+      <h3 className="text-center text-2xl font-bold text-white tracking-wide">
+        {title}
+      </h3>
+
+      <p className="mt-4 text-center text-sm leading-relaxed text-slate-200/90 font-light tracking-wide flex-1">
         {body}
       </p>
-      <LinkButton href={href} variant={variant} className="mt-6 w-full">
+
+      <LinkButton
+        href={href}
+        variant={buttonVariant}
+        className={`mt-8 w-full rounded-xl ${buttonClassName ?? ""}`}
+      >
         {cta}
       </LinkButton>
     </div>
   );
 }
+

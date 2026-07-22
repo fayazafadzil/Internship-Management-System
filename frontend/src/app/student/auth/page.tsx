@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { GraduationCap, KeyRound, Copy, Check } from "lucide-react";
+import { GraduationCap, KeyRound } from "lucide-react";
 import { BackHome } from "@/components/layout/BackHome";
 import { Footer } from "@/components/layout/Footer";
 import { Field, Input } from "@/components/ui/Field";
@@ -32,7 +32,7 @@ export default function StudentSignupPage() {
 
     const studentIdRegex = /^SC\/\d{4}\/\d{5}$/;
     if (!studentIdRegex.test(form.studentId.trim())) {
-      setError("Student ID must be in the format SC/YYYY/DDDDD (e.g., SC/2022/12793).");
+      setError("Format: SC/YYYY/DDDDD");
       return;
     }
 
@@ -49,86 +49,121 @@ export default function StudentSignupPage() {
       }
       setSubmittedRequest(true);
     } catch {
-      setError("Unable to connect to the backend server.");
+      setError("Unable to connect to the server.");
     }
   };
 
   return (
     <>
-      <main className="flex-1 bg-sky">
-        <div className="mx-auto max-w-md px-6 py-10">
-          <div className="mb-6">
-            <BackHome />
-          </div>
+      
+      <main className="relative flex min-h-screen flex-col items-center justify-start bg-[#AEC0D4] px-4 pt-2 pb-12">
+        
+        {/* Back to Home */}
+        <div className="absolute top-2 left-4 md:left-8 transition-transform duration-200 hover:-translate-x-1">
+          <BackHome />
+        </div>
 
-          <div className="overflow-hidden rounded-2xl shadow-xl">
+        {/* Card Component Container */}
+        <div className="w-full max-w-[400px] mt-8">
+          
+          <div className="overflow-hidden bg-white shadow-xl rounded-2xl border border-slate-200/80">
+            
             {/* Header */}
-            <div className="bg-navy px-8 py-8 text-center text-white">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/15">
-                <GraduationCap className="h-7 w-7" />
+            <div className="bg-gradient-to-b from-navy-deep to-navy px-6 py-6 text-center text-white">
+              <div className="mx-auto mb-2.5 flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 ring-2 ring-white/10 backdrop-blur-sm">
+                <GraduationCap className="h-5 w-5 text-white" />
               </div>
-              <h1 className="text-2xl font-bold">Student Portal</h1>
-              <p className="mt-1 text-sm text-white/75">
-                Register to access your internship dashboard
+              <h1 className="text-xl font-bold tracking-wide">Student Portal</h1>
+              <p className="mt-0.5 text-xs text-white/80 max-w-[280px] mx-auto leading-relaxed">
+                Register to access your dashboard
               </p>
             </div>
 
             {/* Body */}
-            <div className="bg-panel px-8 py-8">
+            <div className="bg-white p-6">
               {submittedRequest ? (
                 <AccountCreated email={form.email} />
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid grid-cols-2 gap-4">
-                    <Field label="First Name" htmlFor="firstName">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* First Name & Last Name Grid */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <Field 
+                      label={<span className="text-xs font-bold text-slate-700 uppercase tracking-wider">First Name</span>} 
+                      htmlFor="firstName"
+                    >
                       <Input
                         id="firstName"
-                        placeholder="Enter first name"
+                        placeholder="First name"
                         value={form.firstName}
                         onChange={set("firstName")}
+                        className="mt-1 border-slate-200 rounded-xl py-2 text-sm focus:border-navy focus:ring-navy transition-all shadow-sm"
                         required
                       />
                     </Field>
-                    <Field label="Last Name" htmlFor="lastName">
+                    <Field 
+                      label={<span className="text-xs font-bold text-slate-700 uppercase tracking-wider">Last Name</span>} 
+                      htmlFor="lastName"
+                    >
                       <Input
                         id="lastName"
-                        placeholder="Enter last name"
+                        placeholder="Last name"
                         value={form.lastName}
                         onChange={set("lastName")}
+                        className="mt-1 border-slate-200 rounded-xl py-2 text-sm focus:border-navy focus:ring-navy transition-all shadow-sm"
+                        required
                       />
                     </Field>
                   </div>
-                  <Field label="Student ID" htmlFor="studentId">
+
+                  {/* Student ID Input */}
+                  <Field 
+                    label={<span className="text-xs font-bold text-slate-700 uppercase tracking-wider">Student ID</span>} 
+                    htmlFor="studentId"
+                  >
                     <Input
                       id="studentId"
                       placeholder="e.g. SC/2020/12345"
                       value={form.studentId}
                       onChange={set("studentId")}
+                      className="mt-1 border-slate-200 rounded-xl py-2 text-sm focus:border-navy focus:ring-navy transition-all shadow-sm"
                       required
                     />
                   </Field>
-                  <Field label="University Email" htmlFor="email">
+
+                  {/* University Email Input */}
+                  <Field 
+                    label={<span className="text-xs font-bold text-slate-700 uppercase tracking-wider">University Email</span>} 
+                    htmlFor="email"
+                  >
                     <Input
                       id="email"
                       type="email"
                       placeholder="student@university.ruh.ac.lk"
                       value={form.email}
                       onChange={set("email")}
+                      className="mt-1 border-slate-200 rounded-xl py-2 text-sm focus:border-navy focus:ring-navy transition-all shadow-sm"
                       required
                     />
                   </Field>
 
-                  {error && <p className="text-sm text-red-600">{error}</p>}
+                  {/* Error Message */}
+                  {error && (
+                    <div className="bg-rose-50 p-2.5 border-l-4 border-rose-500 rounded-r-xl">
+                      <p className="text-xs font-semibold text-rose-700 leading-tight">{error}</p>
+                    </div>
+                  )}
 
-                  <Button type="submit" variant="dark" className="w-full py-3.5">
+                  {/* Submit Button */}
+                  <Button type="submit" variant="dark" className="w-full rounded-xl py-3 text-xs font-bold uppercase tracking-wider shadow-md hover:opacity-95 mt-2">
                     Create Account
                   </Button>
 
-                  <p className="text-center text-sm text-navy-deep/70">
+                  {/* Login Link */}
+                  <p className="text-center text-xs text-navy-deep/70 pt-1">
                     Already have an account?{" "}
                     <Link
                       href="/student/login"
-                      className="font-semibold text-navy hover:underline"
+                      className="font-bold text-navy hover:text-navy-deep hover:underline transition-colors"
                     >
                       Log in
                     </Link>
@@ -146,32 +181,36 @@ export default function StudentSignupPage() {
 
 function AccountCreated({ email }: { email: string }) {
   return (
-    <div className="text-center">
-      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-navy/10">
-        <KeyRound className="h-6 w-6 text-navy" />
+    <div className="py-1 text-center">
+      {/* Success Icon */}
+      <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 border border-emerald-100 shadow-sm">
+        <KeyRound className="h-5 w-5 text-emerald-600" />
       </div>
-      <h2 className="text-lg font-bold text-navy-deep">Request Submitted</h2>
-      <p className="mt-2 text-sm text-navy-deep/70">
-        Your registration request has been successfully submitted to the department.
+      <h2 className="text-base font-bold text-navy-deep">Request Submitted</h2>
+      <p className="mt-1 text-xs text-navy-deep/80 px-1 leading-normal">
+        Your registration request has been successfully submitted.
       </p>
 
-      <div className="mt-5 flex items-center justify-center gap-3 rounded-lg border border-navy/20 bg-white px-4 py-3">
-        <code className="text-lg font-bold tracking-wider text-navy-deep">
+      {/* Verification Badge */}
+      <div className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-[#294774]/30 bg-[#294774]/5 py-2 px-3 shadow-sm">
+        <span className="flex h-2 w-2 rounded-full bg-[#294774] animate-pulse" />
+        <code className="text-xs font-extrabold tracking-widest text-[#294774]">
           PENDING VERIFICATION
         </code>
       </div>
 
-      <p className="mt-4 text-xs text-navy-deep/60">
-        Once the department approves, your temporary password will be logged in the backend terminal console.
+      <p className="mt-3 text-xs leading-relaxed text-navy-deep/70 px-2">
+        After verification, you will receive a temporary password via email to securely set up your account.
       </p>
 
       <LinkButton
         href={`/student/login?email=${encodeURIComponent(email)}`}
         variant="dark"
-        className="mt-6 w-full py-3.5"
+        className="mt-5 w-full rounded-xl py-3 text-xs font-bold uppercase tracking-wider shadow-md hover:opacity-95"
       >
-        Continue to Login
+        Go to Login
       </LinkButton>
     </div>
   );
 }
+

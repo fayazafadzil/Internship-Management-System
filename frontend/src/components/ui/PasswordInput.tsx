@@ -20,7 +20,7 @@ export function PasswordInput({ inputClassName, className, ...props }: Props) {
       <input
         type={visible ? "text" : "password"}
         className={cx(
-          "w-full rounded-lg border border-white/40 bg-white/5 px-4 py-3 pr-12 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-periwinkle/60",
+          "w-full rounded-lg border border-white/40 bg-white/5 px-4 py-3 pr-12 text-sm text-black placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-periwinkle/60",
           inputClassName,
         )}
         {...props}

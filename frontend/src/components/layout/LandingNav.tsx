@@ -13,7 +13,11 @@ export function LandingNav() {
     <header className="sticky top-0 z-50 bg-navy-deep text-white">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-wide">
-          <img src="/logo.jpg" alt="IMS Logo" className="h-8 w-auto object-contain" />
+          <img
+            src="/ruhuna.png"
+            alt="IMS Logo"
+            className="h-10 w-auto object-contain "
+          />
           IMS
         </Link>
         <ul className="hidden items-center gap-7 text-sm text-white/80 md:flex">
