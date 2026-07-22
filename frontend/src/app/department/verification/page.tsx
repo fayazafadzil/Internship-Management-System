@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { Search, Download, Trash2, Check, X, Inbox } from "lucide-react";
 import { DepartmentNav } from "@/components/layout/DepartmentNav";
 import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
@@ -23,7 +23,7 @@ interface AccountRequestData {
 export default function DepartmentVerificationPage() {
   const { user, ready } = useAuth();
   useAuthGuard("department", "/department/auth");
-  
+
   const [requests, setRequests] = useState<AccountRequestData[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<"all" | "pending" | "approved" | "rejected">("all");
@@ -60,7 +60,7 @@ export default function DepartmentVerificationPage() {
     let notes = "";
     if (status === "rejected") {
       const input = prompt("Please enter a reason for rejection:");
-      if (input === null) return; // Cancelled
+      if (input === null) return;
       notes = input.trim();
     }
 
@@ -83,7 +83,7 @@ export default function DepartmentVerificationPage() {
       if (status === "approved" && data.request?.tempPassword) {
         alert(`Account approved successfully!\n\nUniversity Email: ${data.request.email}\nTemporary Password: ${data.request.tempPassword}\n\nThis information is also logged in the backend terminal logs.`);
       } else {
-        alert("Registration request rejected successfully.");
+        alert("Registration request processed successfully.");
       }
 
       fetchRequests();
@@ -124,12 +124,13 @@ export default function DepartmentVerificationPage() {
   }, [requests, searchQuery, activeFilter]);
 
   const handleDownload = () => {
-    const headers = ["Name", "Student ID", "University Email", "Request Date", "Status"];
+    const headers = ["No", "Name", "Student ID", "University Email", "Request Date", "Status"];
     let csv = headers.join(",") + "\n";
-    filteredRequests.forEach((row) => {
-      csv += `"${row.firstName} ${row.lastName || ''}","${row.studentId}","${row.email}","${new Date(row.createdAt).toLocaleDateString()}","${row.status}"\n`;
+    filteredRequests.forEach((row, idx) => {
+      const rowNo = String(idx + 1).padStart(2, "0");
+      csv += `"${rowNo}","${row.firstName} ${row.lastName || ''}","${row.studentId}","${row.email}","${new Date(row.createdAt).toLocaleDateString()}","${row.status}"\n`;
     });
-    
+
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -143,159 +144,208 @@ export default function DepartmentVerificationPage() {
 
   if (!ready || loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-sky text-navy-deep">
-        Loading…
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0A2C4E] via-[#153A63] to-[#0F172A] text-[#0F172A]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-9 w-9 animate-spin rounded-full border-[3px] border-[#1B4472]/20 border-t-[#1B4472]" />
+          <span className="text-sm font-medium tracking-wide text-[#1B4472]/70">Loading…</span>
+        </div>
       </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-sky">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A2C4E] via-[#153A63] to-[#0F172A]">
       <DepartmentNav />
-      <main className="mx-auto max-w-7xl px-6 py-10">
-        <div className="rounded-[32px] bg-white/90 p-10 shadow-sm">
-          <p className="text-sm uppercase tracking-[0.35em] text-navy-deep/70 font-bold">
-            Verification
-          </p>
-          <h1 className="mt-4 text-4xl font-bold text-navy-deep">Registration Management</h1>
-          <p className="mt-4 max-w-3xl text-sm text-navy-deep/75 leading-relaxed">
-            Review and manage student internship registration requests. Ensure all institutional prerequisites are met before verifying documentation.
-          </p>
+      <main className="mx-auto max-w-7xl px-6 py-12">
+        {/* Hero / Header */}
+        <div className="relative overflow-hidden rounded-[28px] border border-white/60 bg-[#D4E9FC]/95 p-10 shadow-[0_8px_40px_-12px_rgba(15,23,42,0.15)] backdrop-blur-xl">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-gradient-to-br from-[#2563EB]/20 to-[#1B4472]/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -left-16 h-64 w-64 rounded-full bg-[#2563EB]/10 blur-3xl" />
 
-          {error && (
-            <div className="mt-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-              {error}
-            </div>
-          )}
+          <div className="relative">
+            <p className="inline-flex items-center gap-2 rounded-full bg-[#1B4472]/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.28em] text-[#1B4472]">
+              Verification
+            </p>
+            <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0f2a4a]">
+              Registration Management
+            </h1>
+            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-slate-600">
+              Review and manage student internship registration requests. Ensure all institutional prerequisites are met before verifying documentation.
+            </p>
+          </div>
+        </div>
 
-          <div className="mt-8 overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-sm">
-            <div className="flex flex-col gap-3 border-b border-slate-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
-              <div className="inline-flex flex-nowrap items-center gap-1.5 rounded-[20px] bg-slate-100/80 p-1.5 border border-slate-200 shadow-inner overflow-x-auto">
-                {(["all", "pending", "approved", "rejected"] as const).map((status) => {
-                  const count = status === "all" ? requests.length : requests.filter(r => r.status === status).length;
-                  return (
+        {error && (
+          <div className="mt-6 flex items-center gap-2 rounded-2xl border border-[#EF4444]/20 bg-[#EF4444]/5 px-5 py-3.5 text-sm font-medium text-[#B91C1C]">
+            {error}
+          </div>
+        )}
+
+        {/* Table Card */}
+        <div className="mt-8 overflow-hidden rounded-[28px] border border-white/60 bg-white shadow-[0_8px_40px_-12px_rgba(15,23,42,0.12)]">
+          {/* Toolbar */}
+          <div className="flex flex-col gap-4 border-b border-slate-100 bg-white/80 p-6 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+            <div className="inline-flex flex-nowrap items-center gap-1 rounded-2xl bg-[#EAF3FF] p-1.5 shadow-inner overflow-x-auto">
+              {(["all", "pending", "approved", "rejected"] as const).map((status) => {
+                const isActive = activeFilter === status;
+                return (
                   <button
                     key={status}
                     onClick={() => setActiveFilter(status)}
-                    className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold transition-all duration-200 capitalize ${
-                      activeFilter === status
-                        ? "bg-navy-deep text-white shadow-md"
-                        : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-900"
+                    className={`relative flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold capitalize transition-all duration-300 ease-out ${
+                      isActive
+                        ? "bg-[#1B4472] text-white shadow-[0_4px_14px_-2px_rgba(27,68,114,0.5)] scale-[1.02]"
+                        : "text-slate-500 hover:bg-white hover:text-[#1B4472] hover:shadow-sm"
                     }`}
                   >
                     {status}
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] leading-none ${activeFilter === status ? "bg-white/20 text-white" : "bg-slate-200 text-slate-500"}`}>{count}</span>
                   </button>
-                )})}
-              </div>
-              <div className="relative w-full sm:max-w-xs">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <span className="text-slate-400">🔍</span>
+                );
+              })}
+            </div>
+
+            <div className="flex w-full items-center gap-3 sm:w-auto">
+              <div className="relative w-full sm:w-72">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                  <Search size={16} className="text-slate-400" />
                 </div>
                 <input
                   type="text"
                   placeholder="Search by name, ID, email..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm text-slate-800 placeholder-slate-400 shadow-sm focus:border-navy-deep focus:bg-white focus:outline-none focus:ring-1 focus:ring-navy-deep transition"
+                  className="block w-full rounded-2xl border border-slate-200 bg-slate-50/70 py-3 pl-10 pr-4 text-sm text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-200 focus:border-[#2563EB] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#2563EB]/10"
                 />
               </div>
               <button
                 onClick={handleDownload}
-                className="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 hover:text-navy-deep shadow-sm ml-auto sm:ml-2 whitespace-nowrap"
+                className="group flex shrink-0 items-center gap-2 rounded-2xl bg-[#1B4472] px-5 py-3 text-xs font-bold text-white shadow-[0_4px_14px_-2px_rgba(27,68,114,0.4)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#153556] hover:shadow-[0_8px_20px_-4px_rgba(27,68,114,0.5)] active:translate-y-0 whitespace-nowrap"
               >
+                <Download size={14} className="transition-transform duration-200 group-hover:translate-y-0.5" />
                 Download CSV
               </button>
             </div>
-            <div className="max-h-[600px] overflow-auto rounded-xl border border-slate-200">
-              <table className="min-w-full border-collapse text-left text-sm">
-                <thead className="sticky top-0 z-10 shadow-sm">
-                  <tr className="bg-navy-deep text-white">
-                    <th className="px-6 py-4">Name</th>
-                    <th className="px-6 py-4">Student ID</th>
-                    <th className="px-6 py-4">University Email</th>
-                    <th className="px-6 py-4">Request Date</th>
-                    {activeFilter === "all" && <th className="px-6 py-4">Status</th>}
-                    {activeFilter === "approved" && <th className="px-6 py-4">Temp Password</th>}
-                    {activeFilter === "rejected" && <th className="px-6 py-4">Rejection Notes</th>}
-                    <th className="px-6 py-4 text-right">Actions</th>
+          </div>
+
+          {/* Table */}
+          <div className="max-h-[620px] overflow-auto">
+            <table className="min-w-full border-collapse text-left text-sm">
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-gradient-to-r from-[#1B4472] to-[#20507F] text-white">
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">No</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Student ID</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">University Email</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Request Date</th>
+                  {activeFilter === "all" && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Status</th>}
+                  {activeFilter === "approved" && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Temp Password</th>}
+                  {activeFilter === "rejected" && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Rejection Notes</th>}
+                  <th className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRequests.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-16">
+                      <div className="flex flex-col items-center justify-center gap-3 text-slate-400">
+                        <div className="grid h-14 w-14 place-items-center rounded-2xl bg-slate-50">
+                          <Inbox size={24} className="text-slate-300" />
+                        </div>
+                        <p className="text-sm font-medium italic text-slate-400">No requests found in this section.</p>
+                      </div>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {filteredRequests.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="px-6 py-8 text-center text-slate-500 italic">
-                        No requests found in this section.
+                ) : (
+                  filteredRequests.map((row, idx) => (
+                    <tr
+                      key={row._id}
+                      className={`group border-b border-slate-100 transition-colors duration-150 last:border-b-0 hover:bg-[#EAF3FF]/70 ${
+                        idx % 2 === 0 ? "bg-white" : "bg-slate-50/40"
+                      }`}
+                    >
+                      <td className="px-6 py-4 font-mono text-xs font-bold text-slate-500">
+                        {String(idx + 1).padStart(2, "0")}
                       </td>
-                    </tr>
-                  ) : (
-                    filteredRequests.map((row) => (
-                      <tr key={row._id} className="border-b border-slate-200 last:border-b-0">
-                        <td className="px-6 py-5">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-200/80 border border-slate-300 shadow-inner">
-                              {row.photo ? (
-                                <img src={row.photo} alt={row.firstName} className="h-full w-full object-cover" />
-                              ) : (
-                                <span className="text-lg">👤</span>
-                              )}
-                            </div>
-                            <span className="font-bold text-slate-800">{`${row.firstName} ${row.lastName || ""}`.trim()}</span>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3.5">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#EAF3FF] to-[#D4E9FC] ring-2 ring-white shadow-sm">
+                            {row.photo ? (
+                              <img src={row.photo} alt={row.firstName} className="h-full w-full object-cover" />
+                            ) : (
+                              <span className="text-lg">👤</span>
+                            )}
                           </div>
+                          <span className="font-semibold text-[#0F172A]">{`${row.firstName} ${row.lastName || ""}`.trim()}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="rounded-md bg-slate-100 px-2 py-1 font-mono text-xs font-semibold text-slate-600">{row.studentId}</span>
+                      </td>
+                      <td className="px-6 py-4 font-medium text-[#2563EB]">{row.email}</td>
+                      <td className="px-6 py-4 text-slate-500">{new Date(row.createdAt).toLocaleDateString()}</td>
+
+                      {activeFilter === "all" && (
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest ${
+                            row.status === 'approved' ? 'bg-[#16A34A]/10 text-[#16A34A]' :
+                            row.status === 'rejected' ? 'bg-[#EF4444]/10 text-[#EF4444]' :
+                            'bg-[#F59E0B]/10 text-[#B45309]'
+                          }`}>
+                            <span className={`h-1.5 w-1.5 rounded-full ${
+                              row.status === 'approved' ? 'bg-[#16A34A]' :
+                              row.status === 'rejected' ? 'bg-[#EF4444]' :
+                              'bg-[#F59E0B]'
+                            }`} />
+                            {row.status}
+                          </span>
                         </td>
-                        <td className="px-6 py-4 text-slate-600">{row.studentId}</td>
-                        <td className="px-6 py-4 text-sky-700 font-medium">{row.email}</td>
-                        <td className="px-6 py-4 text-slate-500">{new Date(row.createdAt).toLocaleDateString()}</td>
-                        
-                        {activeFilter === "all" && (
-                          <td className="px-6 py-4">
-                            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] uppercase font-black tracking-widest ${
-                              row.status === 'approved' ? 'bg-emerald-100 text-emerald-800' :
-                              row.status === 'rejected' ? 'bg-rose-100 text-rose-800' :
-                              'bg-amber-100 text-amber-800'
-                            }`}>
-                              {row.status}
-                            </span>
-                          </td>
-                        )}
+                      )}
 
-                        {activeFilter === "approved" && (
-                          <td className="px-6 py-4 font-mono font-bold text-emerald-700">{row.tempPassword || "—"}</td>
-                        )}
-                        {activeFilter === "rejected" && (
-                          <td className="px-6 py-4 text-rose-600">{row.notes || "—"}</td>
-                        )}
+                      {activeFilter === "approved" && (
+                        <td className="px-6 py-4">
+                          <span className="rounded-lg bg-[#16A34A]/10 px-2.5 py-1 font-mono text-xs font-bold text-[#16A34A]">
+                            {row.tempPassword || "—"}
+                          </span>
+                        </td>
+                      )}
+                      {activeFilter === "rejected" && (
+                        <td className="px-6 py-4 text-[#EF4444]">{row.notes || "—"}</td>
+                      )}
 
-                        <td className="px-6 py-4 space-x-2 whitespace-nowrap text-right flex justify-end items-center">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-end gap-2">
                           {row.status === "pending" && (
                             <>
                               <button
                                 onClick={() => handleAction(row._id, "approved")}
-                                className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
+                                className="flex items-center gap-1.5 rounded-full bg-[#16A34A]/10 px-4 py-2 text-xs font-bold text-[#16A34A] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#16A34A] hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(22,163,74,0.5)]"
                               >
+                                <Check size={13} />
                                 Accept
                               </button>
                               <button
                                 onClick={() => handleAction(row._id, "rejected")}
-                                className="rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100"
+                                className="flex items-center gap-1.5 rounded-full bg-[#EF4444]/10 px-4 py-2 text-xs font-bold text-[#EF4444] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#EF4444] hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(239,68,68,0.5)]"
                               >
+                                <X size={13} />
                                 Reject
                               </button>
                             </>
                           )}
                           <button
                             onClick={() => handleDelete(row._id)}
-                            className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+                            title="Delete request"
+                            className="grid h-9 w-9 place-items-center rounded-full border border-slate-200 bg-white text-slate-400 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#EF4444]/30 hover:bg-[#EF4444]/10 hover:text-[#EF4444] hover:shadow-sm"
                           >
-                            Delete
+                            <Trash2 size={15} />
                           </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </main>
