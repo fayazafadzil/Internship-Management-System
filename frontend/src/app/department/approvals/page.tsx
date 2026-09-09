@@ -669,3 +669,4 @@ export default function DepartmentApprovalsPage() {
     </div>
   );
 }
+

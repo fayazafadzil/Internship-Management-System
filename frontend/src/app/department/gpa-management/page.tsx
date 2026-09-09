@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { Lock, Unlock, Plus, Pencil, Trash2, Upload, Download, BookOpen, AlertCircle, CheckCircle, Archive, RefreshCw, X, Settings, Eye } from "lucide-react";
+import { Lock, Unlock, Plus, Pencil, Trash2, Upload, Download, BookOpen, AlertCircle, CheckCircle, Archive, RefreshCw, X, Settings, Eye, CalendarRange, Layers } from "lucide-react";
 import { DepartmentNav } from "@/components/layout/DepartmentNav";
 import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
@@ -369,41 +369,54 @@ export default function GpaManagementPage() {
   }
 
   // ─── Render ─────────────────────────────────────────────────────────────────
-  if (!ready || user?.role !== "department") return <main className="flex-1 bg-sky text-navy-deep min-h-screen">Loading…</main>;
+  if (!ready || user?.role !== "department") {
+    return (
+      <main className="flex-1 min-h-screen flex items-center justify-center bg-gradient-to-br from-[#EAF3FF] via-[#F3F7FC] to-[#DCEBFF] text-[#0b1b33]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-9 w-9 animate-spin rounded-full border-[3px] border-[#1B4472]/20 border-t-[#1B4472]" />
+          <span className="text-sm font-medium tracking-wide text-[#1B4472]/70">Loading…</span>
+        </div>
+      </main>
+    );
+  }
 
   const activeUpload = uploadHistory[0]; // the most recent one
 
   return (
     <>
       <DepartmentNav />
-      <main className="flex-1 bg-sky min-h-screen">
-        <div className="mx-auto max-w-7xl px-6 py-10 relative">
-          
+      <main className="flex-1 min-h-screen bg-gradient-to-br from-[#294B72] via-[#24405f] to-[#1c344f]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10 relative">
+
           {/* TOAST */}
           {toast && (
-            <div className={`fixed top-8 left-1/2 -translate-x-1/2 z-[60] rounded-full px-6 py-3 font-semibold text-white shadow-xl transition flex items-center gap-3 animate-in slide-in-from-top-4 ${toast.ok ? "bg-emerald-600" : "bg-rose-600"}`}>
+            <div className={`fixed top-8 left-1/2 -translate-x-1/2 z-[60] rounded-full px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 flex items-center gap-3 animate-in slide-in-from-top-4 ${toast.ok ? "bg-emerald-600" : "bg-rose-600"}`}>
               {toast.ok ? <CheckCircle className="h-5 w-5" /> : <AlertCircle className="h-5 w-5" />}
               {toast.msg}
             </div>
           )}
 
           {/* HEADER */}
-          <div className="mb-8 rounded-[32px] bg-white/90 p-8 shadow-xs">
-            <p className="text-xs font-bold uppercase tracking-widest text-navy-deep/60 mb-2">Department</p>
-            <h1 className="text-3xl font-extrabold text-navy-deep">GPA Management</h1>
-            <p className="mt-2 text-sm text-navy-deep/60">Manage academic years, semesters, subjects, and publish student results.</p>
+          <div className="mb-8 rounded-[32px] border border-white/50 bg-[#D4E9FC]/95 p-8 sm:p-10 shadow-[0_10px_50px_-15px_rgba(0,0,0,0.35)] backdrop-blur">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full bg-[#1B4472]/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.28em] text-[#1B4472]">
+                Department
+              </p>
+              <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0f2a4a]">GPA Management</h1>
+              <p className="mt-3 max-w-xl text-sm text-slate-500 leading-relaxed">Manage academic years, semesters, subjects, and publish student results.</p>
+            </div>
           </div>
 
           {/* TOP CONTROLS: Dropdowns & Manage Buttons */}
-          <div className="mb-8 flex flex-wrap gap-4 rounded-2xl bg-white/60 p-6 shadow-xs border border-white">
+          <div className="mb-8 flex flex-wrap gap-5 rounded-3xl border border-white/60 bg-[#E5F0FF] p-6 shadow-sm">
             {/* Year Control */}
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Academic Year</label>
+            <div className="flex flex-col gap-1.5">
+              <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#1B4472]/80"><CalendarRange size={12} /> Academic Year</label>
               <div className="flex gap-2">
                 <select
                   value={selectedYearId}
                   onChange={e => { setSelectedYearId(e.target.value); setSelectedSemId(""); }}
-                  className="w-56 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-[#0b1b33] font-semibold outline-none focus:border-[#1d4473] focus:ring-1 focus:ring-[#1d4473]"
+                  className="w-56 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-[#0b1b33] font-semibold shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10"
                 >
                   <option value="">-- Select Academic Year --</option>
                   {years.map(y => (
@@ -412,7 +425,7 @@ export default function GpaManagementPage() {
                 </select>
                 <button
                   onClick={() => setIsYearModalOpen(true)}
-                  className="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-200 transition"
+                  className="flex items-center gap-2 rounded-xl bg-white border border-slate-200 px-4 py-2.5 text-sm font-bold text-[#1B4472] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1B4472] hover:text-white"
                 >
                   <Settings className="h-4 w-4" /> Manage
                 </button>
@@ -420,14 +433,14 @@ export default function GpaManagementPage() {
             </div>
 
             {/* Semester Control */}
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Semester</label>
+            <div className="flex flex-col gap-1.5">
+              <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#1B4472]/80"><Layers size={12} /> Semester</label>
               <div className="flex gap-2">
                 <select
                   value={selectedSemId}
                   onChange={e => setSelectedSemId(e.target.value)}
                   disabled={!selectedYearId}
-                  className="w-56 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-[#0b1b33] font-semibold outline-none focus:border-[#1d4473] focus:ring-1 focus:ring-[#1d4473] disabled:opacity-50 disabled:bg-slate-50"
+                  className="w-56 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-[#0b1b33] font-semibold shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <option value="">-- Select Semester --</option>
                   {semesters.map(s => (
@@ -437,7 +450,7 @@ export default function GpaManagementPage() {
                 <button
                   onClick={() => setIsSemModalOpen(true)}
                   disabled={!selectedYearId}
-                  className="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 rounded-xl bg-white border border-slate-200 px-4 py-2.5 text-sm font-bold text-[#1B4472] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1B4472] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-white disabled:hover:text-[#1B4472]"
                 >
                   <Settings className="h-4 w-4" /> Manage
                 </button>
@@ -447,33 +460,34 @@ export default function GpaManagementPage() {
 
           {/* MAIN WORKSPACE */}
           {!selectedSemester ? (
-            <div className="flex h-64 items-center justify-center rounded-[32px] bg-white/60 shadow-xs border border-white border-dashed">
-              <div className="text-center text-slate-400">
+            <div className="flex h-64 items-center justify-center rounded-[32px] border-2 border-dashed border-white/60 bg-[#E5F0FF]/80 shadow-sm">
+              <div className="text-center text-slate-400 px-6">
                 <BookOpen className="mx-auto mb-3 h-10 w-10 opacity-40" />
-                <p className="text-sm font-medium">Select an Academic Year and Semester from the dropdowns above to manage subjects and results.</p>
+                <p className="text-slate-400 font-medium text-sm">Select an Academic Year and Semester from the dropdowns above to manage subjects and results.</p>
               </div>
             </div>
           ) : (
             <div className="grid gap-6 lg:grid-cols-[1fr_400px]">
-              
+
               {/* LEFT: Subjects */}
               <div className="space-y-6">
                 {/* Semester Header Badge */}
-                <div className="rounded-[32px] bg-[#1d4473] px-8 py-5 text-white flex items-center gap-4 shadow-xs">
-                  <div className="flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-white/60">{selectedYear?.year ?? ""}</p>
+                <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1e3d5f] to-[#152c46] px-8 py-5 text-white flex items-center gap-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.4)]">
+                  <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/5 blur-3xl" />
+                  <div className="relative flex-1">
+                    <p className="text-xs font-bold uppercase tracking-wider text-white/50">{selectedYear?.year ?? ""}</p>
                     <h2 className="mt-1 text-xl font-bold">{selectedSemester.label || `Semester ${selectedSemester.semesterNumber}`}</h2>
                   </div>
                   {selectedSemester.isLocked
-                    ? <div className="flex items-center gap-1.5 rounded-full bg-amber-400/20 px-3 py-1 text-amber-300 text-xs font-bold border border-amber-400/30"><Lock className="h-3.5 w-3.5" /> Locked</div>
-                    : <div className="flex items-center gap-1.5 rounded-full bg-emerald-400/20 px-3 py-1 text-emerald-300 text-xs font-bold border border-emerald-400/30"><Unlock className="h-3.5 w-3.5" /> Unlocked</div>
+                    ? <div className="relative flex items-center gap-1.5 rounded-full bg-amber-400/20 px-3.5 py-1.5 text-amber-300 text-xs font-bold border border-amber-400/30"><Lock className="h-3.5 w-3.5" /> Locked</div>
+                    : <div className="relative flex items-center gap-1.5 rounded-full bg-emerald-400/20 px-3.5 py-1.5 text-emerald-300 text-xs font-bold border border-emerald-400/30"><Unlock className="h-3.5 w-3.5" /> Unlocked</div>
                   }
                 </div>
 
                 {/* Subjects Panel */}
-                <div className="rounded-[32px] bg-white/90 p-6 shadow-xs relative overflow-hidden">
+                <div className="rounded-[28px] border border-white/60 bg-[#E5F0FF] p-6 shadow-sm relative overflow-hidden">
                   {selectedSemester.isLocked && (
-                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex items-center justify-center">
                       <div className="bg-white px-6 py-3 rounded-2xl shadow-lg border border-amber-200 flex items-center gap-3 text-amber-600 font-bold">
                         <Lock className="h-5 w-5" />
                         Subjects are locked because results are published.
@@ -482,66 +496,68 @@ export default function GpaManagementPage() {
                   )}
 
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold text-[#0b1b33]">Subject Repository ({subjects.length})</h3>
+                    <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#1B4472]">
+                      <BookOpen size={14} /> Subject Repository ({subjects.length})
+                    </h3>
                   </div>
 
                   {/* Add subject form */}
                   <div className="mb-4 grid grid-cols-[1fr_2fr_80px_100px_auto] gap-2 items-end">
-                    <input className="rounded-lg border border-slate-200 px-3 py-2 text-xs outline-none focus:border-[#1d4473]" placeholder="Code (e.g. CS301)" value={newSubject.code} onChange={e => setNewSubject(s => ({ ...s, code: e.target.value }))} />
-                    <input className="rounded-lg border border-slate-200 px-3 py-2 text-xs outline-none focus:border-[#1d4473]" placeholder="Subject Name (e.g. Database Systems)" value={newSubject.name} onChange={e => setNewSubject(s => ({ ...s, name: e.target.value }))} />
-                    <input className="rounded-lg border border-slate-200 px-3 py-2 text-xs text-center outline-none focus:border-[#1d4473]" type="number" min={1} placeholder="Credits" value={newSubject.credits} onChange={e => setNewSubject(s => ({ ...s, credits: e.target.value }))} />
-                    <select className="rounded-lg border border-slate-200 px-2 py-2 text-xs outline-none focus:border-[#1d4473]" value={newSubject.type} onChange={e => setNewSubject(s => ({ ...s, type: e.target.value as "Core" | "Optional" }))}>
+                    <input className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10" placeholder="Code (e.g. CS301)" value={newSubject.code} onChange={e => setNewSubject(s => ({ ...s, code: e.target.value }))} />
+                    <input className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10" placeholder="Subject Name (e.g. Database Systems)" value={newSubject.name} onChange={e => setNewSubject(s => ({ ...s, name: e.target.value }))} />
+                    <input className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs text-center shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10" type="number" min={1} placeholder="Credits" value={newSubject.credits} onChange={e => setNewSubject(s => ({ ...s, credits: e.target.value }))} />
+                    <select className="rounded-xl border border-slate-200 bg-white px-2 py-2.5 text-xs shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10" value={newSubject.type} onChange={e => setNewSubject(s => ({ ...s, type: e.target.value as "Core" | "Optional" }))}>
                       <option value="Core">Core</option>
                       <option value="Optional">Optional</option>
                     </select>
-                    <button onClick={createSubject} className="rounded-lg bg-[#1d4473] px-3 py-2 text-white text-xs hover:bg-[#163a60] transition flex items-center justify-center gap-1"><Plus className="h-3.5 w-3.5" /> Add</button>
+                    <button onClick={createSubject} className="rounded-xl bg-[#1B4472] px-3 py-2.5 text-white text-xs font-bold shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#153556] hover:shadow-md flex items-center justify-center gap-1"><Plus className="h-3.5 w-3.5" /> Add</button>
                   </div>
 
                   {/* Subject Table */}
                   {subjects.length === 0 ? (
-                    <p className="py-6 text-center text-sm text-slate-400 border-2 border-dashed border-slate-200 rounded-xl mt-4">No subjects added to this semester yet.</p>
+                    <p className="py-8 text-center text-sm text-slate-400 border-2 border-dashed border-slate-200 rounded-2xl mt-4">No subjects added to this semester yet.</p>
                   ) : (
-                    <div className="max-h-[600px] overflow-auto rounded-xl border border-slate-100">
+                    <div className="max-h-[600px] overflow-auto rounded-2xl border border-slate-100 bg-white shadow-sm">
                       <table className="w-full text-xs">
-                        <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider sticky top-0 z-10 shadow-sm">
+                        <thead className="bg-[#1B4472] text-white uppercase tracking-wider sticky top-0 z-10 shadow-sm">
                           <tr>
-                            <th className="px-3 py-2.5 text-left font-bold">Code</th>
-                            <th className="px-3 py-2.5 text-left font-bold">Subject Name</th>
-                            <th className="px-3 py-2.5 text-center font-bold">Credits</th>
-                            <th className="px-3 py-2.5 text-center font-bold">Type</th>
-                            <th className="px-3 py-2.5 text-right font-bold">Actions</th>
+                            <th className="px-4 py-3 text-left font-bold">Code</th>
+                            <th className="px-4 py-3 text-left font-bold">Subject Name</th>
+                            <th className="px-4 py-3 text-center font-bold">Credits</th>
+                            <th className="px-4 py-3 text-center font-bold">Type</th>
+                            <th className="px-4 py-3 text-right font-bold">Actions</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-50">
-                          {subjects.map(sub => (
-                            <tr key={sub._id} className="hover:bg-slate-50/50 transition">
+                        <tbody className="divide-y divide-slate-100">
+                          {subjects.map((sub, idx) => (
+                            <tr key={sub._id} className={`transition-colors duration-150 hover:bg-[#EAF3FF] ${idx % 2 === 0 ? "bg-white" : "bg-slate-50/50"}`}>
                               {editSubjectId === sub._id ? (
                                 <>
-                                  <td className="px-3 py-2 font-mono font-bold text-[#1d4473]">{sub.subjectCode}</td>
-                                  <td className="px-3 py-2"><input className="w-full rounded border border-slate-300 px-2 py-1.5 text-xs outline-none focus:border-[#1d4473]" value={editSubjectData.name} onChange={e => setEditSubjectData(d => ({ ...d, name: e.target.value }))} /></td>
-                                  <td className="px-3 py-2"><input className="w-16 mx-auto block rounded border border-slate-300 px-2 py-1.5 text-xs text-center outline-none focus:border-[#1d4473]" type="number" value={editSubjectData.credits} onChange={e => setEditSubjectData(d => ({ ...d, credits: e.target.value }))} /></td>
-                                  <td className="px-3 py-2">
-                                    <select className="mx-auto block rounded border border-slate-300 px-1 py-1.5 text-xs outline-none focus:border-[#1d4473]" value={editSubjectData.type} onChange={e => setEditSubjectData(d => ({ ...d, type: e.target.value as "Core" | "Optional" }))}>
+                                  <td className="px-4 py-3 font-mono font-bold text-[#1B4472]">{sub.subjectCode}</td>
+                                  <td className="px-4 py-3"><input className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-xs outline-none focus:border-[#1B4472]" value={editSubjectData.name} onChange={e => setEditSubjectData(d => ({ ...d, name: e.target.value }))} /></td>
+                                  <td className="px-4 py-3"><input className="w-16 mx-auto block rounded-lg border border-slate-300 px-2 py-1.5 text-xs text-center outline-none focus:border-[#1B4472]" type="number" value={editSubjectData.credits} onChange={e => setEditSubjectData(d => ({ ...d, credits: e.target.value }))} /></td>
+                                  <td className="px-4 py-3">
+                                    <select className="mx-auto block rounded-lg border border-slate-300 px-1 py-1.5 text-xs outline-none focus:border-[#1B4472]" value={editSubjectData.type} onChange={e => setEditSubjectData(d => ({ ...d, type: e.target.value as "Core" | "Optional" }))}>
                                       <option value="Core">Core</option>
                                       <option value="Optional">Optional</option>
                                     </select>
                                   </td>
-                                  <td className="px-3 py-2 text-right space-x-3">
+                                  <td className="px-4 py-3 text-right space-x-3">
                                     <button onClick={() => updateSubject(sub._id)} className="text-emerald-600 font-bold hover:underline">Save</button>
                                     <button onClick={() => setEditSubjectId(null)} className="text-slate-400 hover:underline">Cancel</button>
                                   </td>
                                 </>
                               ) : (
                                 <>
-                                  <td className="px-3 py-2.5 font-mono font-bold text-[#1d4473]">{sub.subjectCode}</td>
-                                  <td className="px-3 py-2.5 text-slate-700 font-medium">{sub.subjectName}</td>
-                                  <td className="px-3 py-2.5 text-center text-slate-600">{sub.credits}</td>
-                                  <td className="px-3 py-2.5 text-center">
-                                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide ${sub.subjectType === "Core" ? "bg-blue-100 text-blue-700" : "bg-violet-100 text-violet-700"}`}>{sub.subjectType}</span>
+                                  <td className="px-4 py-3.5 font-mono font-bold text-[#1B4472]">{sub.subjectCode}</td>
+                                  <td className="px-4 py-3.5 text-slate-700 font-medium">{sub.subjectName}</td>
+                                  <td className="px-4 py-3.5 text-center text-slate-600 font-semibold">{sub.credits}</td>
+                                  <td className="px-4 py-3.5 text-center">
+                                    <span className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${sub.subjectType === "Core" ? "bg-blue-50 text-blue-700 border border-blue-100" : "bg-violet-50 text-violet-700 border border-violet-100"}`}>{sub.subjectType}</span>
                                   </td>
-                                  <td className="px-3 py-2.5 text-right space-x-1.5">
-                                    <button onClick={() => { setEditSubjectId(sub._id); setEditSubjectData({ name: sub.subjectName, credits: String(sub.credits), type: sub.subjectType }); }} className="rounded p-1 text-slate-400 hover:text-[#1d4473] transition"><Pencil className="h-3.5 w-3.5" /></button>
-                                    <button onClick={() => deleteSubject(sub._id)} className="rounded p-1 text-slate-400 hover:text-rose-500 transition"><Trash2 className="h-3.5 w-3.5" /></button>
+                                  <td className="px-4 py-3.5 text-right space-x-1">
+                                    <button onClick={() => { setEditSubjectId(sub._id); setEditSubjectData({ name: sub.subjectName, credits: String(sub.credits), type: sub.subjectType }); }} className="rounded-full p-1.5 text-slate-400 transition-colors duration-200 hover:bg-[#1B4472]/10 hover:text-[#1B4472]"><Pencil className="h-3.5 w-3.5" /></button>
+                                    <button onClick={() => deleteSubject(sub._id)} className="rounded-full p-1.5 text-slate-400 transition-colors duration-200 hover:bg-rose-50 hover:text-rose-500"><Trash2 className="h-3.5 w-3.5" /></button>
                                   </td>
                                 </>
                               )}
@@ -556,23 +572,23 @@ export default function GpaManagementPage() {
 
               {/* RIGHT: Uploads */}
               <div className="space-y-6">
-                <div className="rounded-[32px] bg-white/90 p-6 shadow-xs">
-                  <h3 className="font-bold text-[#0b1b33] mb-4">Upload Results</h3>
-                  
+                <div className="rounded-[28px] border border-white/60 bg-[#E5F0FF] p-6 shadow-sm">
+                  <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#1B4472] mb-4"><Upload size={14} /> Upload Results</h3>
+
                   {/* Download Template */}
                   <button
                     onClick={downloadTemplate}
                     disabled={subjects.length === 0}
-                    className="w-full mb-4 flex items-center justify-center gap-2 rounded-xl bg-sky-50 px-4 py-3 text-sm font-bold text-sky-700 hover:bg-sky-100 border border-sky-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full mb-4 flex items-center justify-center gap-2 rounded-xl bg-[#1B4472] px-4 py-3 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#153556] hover:shadow-md disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   >
                     <Download className="h-4 w-4" /> Download Result Template
                   </button>
 
-                  <div className="h-px bg-slate-100 w-full mb-4" />
+                  <div className="h-px bg-slate-200/70 w-full mb-4" />
 
                   {/* File Drop Zone */}
                   <div
-                    className={`relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed py-10 transition cursor-pointer ${uploadFile ? "border-emerald-400 bg-emerald-50" : "border-slate-300 bg-slate-50 hover:border-[#1d4473]/50 hover:bg-sky-50"}`}
+                    className={`relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed py-10 transition-all duration-300 cursor-pointer ${uploadFile ? "border-emerald-400 bg-emerald-50" : "border-slate-300 bg-white hover:border-[#1B4472]/50 hover:bg-[#EAF3FF]"}`}
                     onClick={() => fileInputRef.current?.click()}
                     onDragOver={e => { e.preventDefault(); }}
                     onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) { setUploadFile(f); setUploadError(null); setUploadWarnings([]); } }}
@@ -581,7 +597,7 @@ export default function GpaManagementPage() {
                     {uploadFile ? (
                       <p className="text-sm font-semibold text-emerald-700">{uploadFile.name}</p>
                     ) : (
-                      <p className="text-sm text-slate-500">Drop .xlsx file here or <span className="font-semibold text-[#1d4473] underline">click to browse</span></p>
+                      <p className="text-sm text-slate-500">Drop .xlsx file here or <span className="font-semibold text-[#1B4472] underline">click to browse</span></p>
                     )}
                     <input
                       ref={fileInputRef}
@@ -594,13 +610,13 @@ export default function GpaManagementPage() {
 
                   {/* Error Panel */}
                   {uploadError && (
-                    <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 p-4">
+                    <div className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4">
                       <div className="flex items-start gap-3 text-rose-700">
                         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                         <div className="flex-1">
                           <p className="text-sm font-bold">Validation Failed ({uploadError.length} errors)</p>
                           <p className="mt-1 text-xs opacity-90 text-balance">The file was completely rejected. No records were saved. Please download the error report, fix the issues, and try again.</p>
-                          <button onClick={downloadErrorReport} className="mt-3 flex items-center gap-1.5 rounded-lg bg-rose-200/50 px-3 py-1.5 text-xs font-bold text-rose-800 hover:bg-rose-200 transition">
+                          <button onClick={downloadErrorReport} className="mt-3 flex items-center gap-1.5 rounded-full bg-rose-200/50 px-3.5 py-1.5 text-xs font-bold text-rose-800 transition-all duration-200 hover:bg-rose-200">
                             <Download className="h-3 w-3" /> Download Error Report
                           </button>
                         </div>
@@ -610,7 +626,7 @@ export default function GpaManagementPage() {
 
                   {/* Warning Panel */}
                   {uploadWarnings.length > 0 && !uploadError && (
-                    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                    <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
                       <div className="flex items-start gap-3 text-amber-800">
                         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                         <div>
@@ -628,7 +644,7 @@ export default function GpaManagementPage() {
                     <button
                       onClick={handleUpload}
                       disabled={uploading}
-                      className="mt-4 w-full rounded-xl bg-[#1d4473] py-3 text-sm font-bold text-white hover:bg-[#163a60] transition disabled:opacity-50"
+                      className="mt-4 w-full rounded-xl bg-[#1B4472] py-3 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#153556] hover:shadow-md disabled:opacity-50 disabled:hover:translate-y-0"
                     >
                       {uploading ? "Uploading & Validating..." : "Upload & Validate"}
                     </button>
@@ -637,38 +653,38 @@ export default function GpaManagementPage() {
 
                 {/* State Machine Status */}
                 {activeUpload && !uploadError && (
-                  <div className="rounded-[32px] bg-white/90 p-6 shadow-xs">
-                    <h3 className="font-bold text-[#0b1b33] mb-4">Status & Publish</h3>
-                    <div className="mb-4 rounded-xl border border-slate-100 bg-slate-50 p-4">
-                      <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Current Upload</p>
-                      <p className="text-sm font-medium text-navy-deep break-all">{activeUpload.fileName}</p>
+                  <div className="rounded-[28px] border border-white/60 bg-[#E5F0FF] p-6 shadow-sm">
+                    <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#1B4472] mb-4"><CheckCircle size={14} /> Status & Publish</h3>
+                    <div className="mb-4 rounded-2xl border border-white/60 bg-white p-4 shadow-sm">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Current Upload</p>
+                      <p className="text-sm font-semibold text-[#0f2a4a] break-all">{activeUpload.fileName}</p>
                       <p className="text-xs text-slate-500 mt-1">Version {activeUpload.version} • {activeUpload.recordCount} records</p>
-                      
+
                       <div className="mt-3 flex items-center gap-2">
                         {activeUpload.isPublished ? (
-                          <span className="flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-200"><CheckCircle className="h-3.5 w-3.5" /> Published live</span>
+                          <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-100"><CheckCircle className="h-3.5 w-3.5" /> Published live</span>
                         ) : (
-                          <span className="flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700 border border-amber-200"><Archive className="h-3.5 w-3.5" /> Draft — not published</span>
+                          <span className="flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700 border border-amber-100"><Archive className="h-3.5 w-3.5" /> Draft — not published</span>
                         )}
                       </div>
                     </div>
 
                     <div className="mb-4 flex items-center gap-2">
-                      <button onClick={() => fetchUploadData(activeUpload._id)} disabled={loadingView} className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-sky-50 px-2 py-3 text-sm font-bold text-sky-600 hover:bg-sky-100 transition disabled:opacity-50 border border-sky-100">
+                      <button onClick={() => fetchUploadData(activeUpload._id)} disabled={loadingView} className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#1B4472] px-2 py-3 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#153556] hover:shadow-md">
                         <Eye className="h-4 w-4 shrink-0" /> {loadingView ? "Loading..." : "View Data"}
                       </button>
-                      <a href={activeUpload.downloadUrl} download className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-2 py-3 text-sm font-bold text-slate-600 hover:bg-slate-100 transition border border-slate-200">
+                      <a href={activeUpload.downloadUrl} download className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-[#1B4472]/30 bg-white px-2 py-3 text-sm font-bold text-[#1B4472] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1B4472] hover:text-white hover:shadow-md">
                         <Download className="h-4 w-4 shrink-0" /> Original File
                       </a>
                     </div>
 
                     {!activeUpload.isPublished ? (
-                      <button onClick={() => handlePublish(activeUpload._id)} disabled={publishing} className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition disabled:opacity-50">
+                      <button onClick={() => handlePublish(activeUpload._id)} disabled={publishing} className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md disabled:opacity-50 disabled:hover:translate-y-0">
                         <CheckCircle className="h-4 w-4" /> {publishing ? "Publishing..." : "Publish Results"}
                       </button>
                     ) : (
                       <div className="space-y-3">
-                        <button onClick={() => handleDelete(activeUpload._id)} disabled={deleting} className="w-full flex items-center justify-center gap-2 rounded-xl bg-rose-50 px-4 py-3 text-sm font-bold text-rose-600 hover:bg-rose-100 transition disabled:opacity-50">
+                        <button onClick={() => handleDelete(activeUpload._id)} disabled={deleting} className="w-full flex items-center justify-center gap-2 rounded-xl bg-rose-50 px-4 py-3 text-sm font-bold text-rose-600 border border-rose-100 transition-all duration-300 hover:-translate-y-0.5 hover:bg-rose-100 disabled:opacity-50 disabled:hover:translate-y-0">
                           <Trash2 className="h-4 w-4" /> {deleting ? "Deleting..." : "Delete Results"}
                         </button>
                         <p className="text-[10px] text-center text-slate-400 px-4">Deleting unlocks the semester and recalculates all affected student CGPAs.</p>
@@ -684,14 +700,14 @@ export default function GpaManagementPage() {
       <Footer />
 
       {/* ─── MODALS ───────────────────────────────────────────────────────────── */}
-      
+
       {/* Manage Years Modal */}
       {isYearModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deep/40 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-[32px] bg-white shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between bg-slate-50 px-6 py-4 border-b border-slate-100">
-              <h2 className="text-lg font-bold text-navy-deep">Manage Academic Years</h2>
-              <button onClick={() => setIsYearModalOpen(false)} className="rounded-full p-2 text-slate-400 hover:bg-slate-200 hover:text-slate-700 transition">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#294B72]/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between bg-[#1B4472] px-6 py-4">
+              <h2 className="text-lg font-bold text-white">Manage Academic Years</h2>
+              <button onClick={() => setIsYearModalOpen(false)} className="rounded-full p-2 text-white/80 transition-colors duration-200 hover:bg-white/15 hover:text-white">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -699,36 +715,36 @@ export default function GpaManagementPage() {
               {/* Add form */}
               <div className="flex gap-2 mb-6">
                 <input
-                  className="flex-1 rounded-xl border border-slate-300 px-4 py-2 text-sm outline-none focus:border-[#1d4473]"
+                  className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10"
                   placeholder="e.g. 2024/2025"
                   value={newYear}
                   onChange={e => setNewYear(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && createYear()}
                 />
-                <button onClick={createYear} className="rounded-xl bg-[#1d4473] px-4 py-2 text-white font-bold hover:bg-[#163a60] transition">Add</button>
+                <button onClick={createYear} className="rounded-xl bg-[#1B4472] px-4 py-2.5 text-white font-bold shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#153556]">Add</button>
               </div>
 
               {/* List */}
               <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
                 {years.length === 0 && <p className="text-center text-sm text-slate-400 py-4">No academic years added.</p>}
                 {years.map(year => (
-                  <div key={year._id} className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
+                  <div key={year._id} className="flex items-center justify-between rounded-xl border border-slate-100 bg-[#E5F0FF] px-4 py-3 transition-colors duration-200 hover:bg-[#A5C3EF]/40">
                     {editYearId === year._id ? (
                       <div className="flex flex-1 items-center gap-2">
-                        <input className="flex-1 rounded-lg border border-slate-300 px-2 py-1 text-sm outline-none" value={editYearVal} onChange={e => setEditYearVal(e.target.value)} />
+                        <input className="flex-1 rounded-lg border border-slate-300 px-2 py-1 text-sm outline-none focus:border-[#1B4472]" value={editYearVal} onChange={e => setEditYearVal(e.target.value)} />
                         <button onClick={() => updateYear(year._id)} className="text-xs text-emerald-600 font-bold hover:underline">Save</button>
                         <button onClick={() => setEditYearId(null)} className="text-xs text-slate-400 hover:underline">Cancel</button>
                       </div>
                     ) : (
                       <>
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-navy-deep">{year.year}</span>
+                          <span className="font-bold text-[#0f2a4a]">{year.year}</span>
                           {year.isLocked && <span title="Locked (Results Published)"><Lock className="h-3 w-3 text-amber-500" /></span>}
                         </div>
                         {!year.isLocked && (
                           <div className="flex items-center gap-2">
-                            <button onClick={() => { setEditYearId(year._id); setEditYearVal(year.year); }} className="text-slate-400 hover:text-navy-deep transition"><Pencil className="h-4 w-4" /></button>
-                            <button onClick={() => deleteYear(year._id)} className="text-slate-400 hover:text-rose-500 transition"><Trash2 className="h-4 w-4" /></button>
+                            <button onClick={() => { setEditYearId(year._id); setEditYearVal(year.year); }} className="text-slate-400 transition-colors duration-200 hover:text-[#1B4472]"><Pencil className="h-4 w-4" /></button>
+                            <button onClick={() => deleteYear(year._id)} className="text-slate-400 transition-colors duration-200 hover:text-rose-500"><Trash2 className="h-4 w-4" /></button>
                           </div>
                         )}
                       </>
@@ -743,22 +759,22 @@ export default function GpaManagementPage() {
 
       {/* Manage Semesters Modal */}
       {isSemModalOpen && selectedYear && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deep/40 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-[32px] bg-white shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between bg-slate-50 px-6 py-4 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#294B72]/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between bg-[#1B4472] px-6 py-4">
               <div>
-                <h2 className="text-lg font-bold text-navy-deep">Manage Semesters</h2>
-                <p className="text-xs text-slate-500 font-semibold">{selectedYear.year}</p>
+                <h2 className="text-lg font-bold text-white">Manage Semesters</h2>
+                <p className="text-xs text-slate-200 font-semibold">{selectedYear.year}</p>
               </div>
-              <button onClick={() => setIsSemModalOpen(false)} className="rounded-full p-2 text-slate-400 hover:bg-slate-200 hover:text-slate-700 transition">
+              <button onClick={() => setIsSemModalOpen(false)} className="rounded-full p-2 text-white/80 transition-colors duration-200 hover:bg-white/15 hover:text-white">
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div className="p-6">
               {/* Add form */}
-              <div className="flex gap-2 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+              <div className="flex gap-2 mb-6 bg-[#E5F0FF] p-4 rounded-2xl border border-white">
                 <input
-                  className="w-16 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none text-center focus:border-[#1d4473]"
+                  className="w-16 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-center shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10"
                   placeholder="#"
                   type="number"
                   min={1}
@@ -766,39 +782,39 @@ export default function GpaManagementPage() {
                   onChange={e => setNewSem(s => ({ ...s, number: e.target.value }))}
                 />
                 <input
-                  className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#1d4473]"
+                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm outline-none transition-all duration-200 focus:border-[#1B4472] focus:ring-4 focus:ring-[#1B4472]/10"
                   placeholder="Label (e.g. Semester 1)"
                   value={newSem.label}
                   onChange={e => setNewSem(s => ({ ...s, label: e.target.value }))}
                 />
-                <button onClick={createSemester} className="rounded-lg bg-[#1d4473] px-4 py-2 text-white font-bold hover:bg-[#163a60] transition">Add</button>
+                <button onClick={createSemester} className="rounded-lg bg-[#1B4472] px-4 py-2 text-white font-bold shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#153556]">Add</button>
               </div>
 
               {/* List */}
               <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
                 {semesters.length === 0 && <p className="text-center text-sm text-slate-400 py-4">No semesters added for this year.</p>}
                 {semesters.map(sem => (
-                  <div key={sem._id} className="flex items-center justify-between rounded-xl border border-slate-100 bg-white px-4 py-3 shadow-xs">
+                  <div key={sem._id} className="flex items-center justify-between rounded-xl border border-slate-100 bg-[#E5F0FF] px-4 py-3 shadow-sm transition-colors duration-200 hover:bg-[#A5C3EF]/40">
                     {editSemId === sem._id ? (
                       <div className="flex flex-1 items-center gap-2">
                         <span className="font-black text-slate-400 w-6 text-center">{sem.semesterNumber}</span>
-                        <input className="flex-1 rounded-lg border border-slate-300 px-2 py-1 text-sm outline-none" value={editSemVal} onChange={e => setEditSemVal(e.target.value)} />
+                        <input className="flex-1 rounded-lg border border-slate-300 px-2 py-1 text-sm outline-none focus:border-[#1B4472]" value={editSemVal} onChange={e => setEditSemVal(e.target.value)} />
                         <button onClick={() => updateSemester(sem._id)} className="text-xs text-emerald-600 font-bold hover:underline">Save</button>
                         <button onClick={() => setEditSemId(null)} className="text-xs text-slate-400 hover:underline">Cancel</button>
                       </div>
                     ) : (
                       <>
                         <div className="flex items-center gap-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 font-black text-xs">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B4472]/10 text-[#1B4472] font-black text-xs">
                             {sem.semesterNumber}
                           </div>
-                          <span className="font-bold text-navy-deep">{sem.label || `Semester ${sem.semesterNumber}`}</span>
+                          <span className="font-bold text-[#0f2a4a]">{sem.label || `Semester ${sem.semesterNumber}`}</span>
                           {sem.isLocked && <span title="Locked (Results Published)"><Lock className="h-3 w-3 text-amber-500" /></span>}
                         </div>
                         {!sem.isLocked && (
                           <div className="flex items-center gap-2">
-                            <button onClick={() => { setEditSemId(sem._id); setEditSemVal(sem.label); }} className="text-slate-400 hover:text-navy-deep transition"><Pencil className="h-4 w-4" /></button>
-                            <button onClick={() => deleteSemester(sem._id)} className="text-slate-400 hover:text-rose-500 transition"><Trash2 className="h-4 w-4" /></button>
+                            <button onClick={() => { setEditSemId(sem._id); setEditSemVal(sem.label); }} className="text-slate-400 transition-colors duration-200 hover:text-[#1B4472]"><Pencil className="h-4 w-4" /></button>
+                            <button onClick={() => deleteSemester(sem._id)} className="text-slate-400 transition-colors duration-200 hover:text-rose-500"><Trash2 className="h-4 w-4" /></button>
                           </div>
                         )}
                       </>
@@ -813,33 +829,33 @@ export default function GpaManagementPage() {
 
       {/* View Results Modal */}
       {isViewModalOpen && viewData && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deep/40 backdrop-blur-sm p-4">
-          <div className="w-full max-w-5xl max-h-[90vh] rounded-[32px] bg-white shadow-2xl flex flex-col animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between bg-slate-50 px-6 py-4 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#294B72]/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-5xl max-h-[90vh] rounded-3xl bg-white shadow-2xl flex flex-col animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between bg-[#1B4472] px-6 py-4">
               <div>
-                <h2 className="text-lg font-bold text-navy-deep">Uploaded Results Data</h2>
-                <p className="text-xs text-slate-500 font-semibold">{viewData.rows.length} students</p>
+                <h2 className="text-lg font-bold text-white">Uploaded Results Data</h2>
+                <p className="text-xs text-slate-200 font-semibold">{viewData.rows.length} students</p>
               </div>
-              <button onClick={() => setIsViewModalOpen(false)} className="rounded-full p-2 text-slate-400 hover:bg-slate-200 hover:text-slate-700 transition">
+              <button onClick={() => setIsViewModalOpen(false)} className="rounded-full p-2 text-white/80 transition-colors duration-200 hover:bg-white/15 hover:text-white">
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div className="p-6 overflow-auto">
-              <div className="max-h-[600px] overflow-auto rounded-xl border border-slate-100 relative">
+              <div className="max-h-[600px] overflow-auto rounded-2xl border border-slate-100 relative">
                 <table className="w-full text-xs whitespace-nowrap">
-                  <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider sticky top-0 z-20 shadow-sm">
+                  <thead className="bg-[#1B4472] text-white uppercase tracking-wider sticky top-0 z-20 shadow-sm">
                     <tr>
-                      <th className="px-4 py-3 text-left font-bold sticky left-0 bg-slate-50 z-10 shadow-[1px_0_0_0_#f1f5f9]">Reg No</th>
+                      <th className="px-4 py-3 text-left font-bold sticky left-0 bg-[#1B4472] z-10">Reg No</th>
                       <th className="px-4 py-3 text-left font-bold">Name</th>
                       {viewData.subjects.map(sub => (
                         <th key={sub} className="px-4 py-3 text-center font-bold">{sub}</th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-50">
-                    {viewData.rows.map(row => (
-                      <tr key={row.registrationNo} className="hover:bg-slate-50/50 transition">
-                        <td className="px-4 py-3 font-mono font-bold text-[#1d4473] sticky left-0 bg-white shadow-[1px_0_0_0_#f1f5f9] group-hover:bg-slate-50">{row.registrationNo}</td>
+                  <tbody className="divide-y divide-slate-100">
+                    {viewData.rows.map((row, idx) => (
+                      <tr key={row.registrationNo} className={`transition-colors duration-150 hover:bg-[#EAF3FF] ${idx % 2 === 0 ? "bg-white" : "bg-slate-50/50"}`}>
+                        <td className="px-4 py-3 font-mono font-bold text-[#1B4472] sticky left-0 bg-white shadow-[1px_0_0_0_#f1f5f9]">{row.registrationNo}</td>
                         <td className="px-4 py-3 text-slate-700 font-medium">{row.studentName || "-"}</td>
                         {viewData.subjects.map(sub => (
                           <td key={sub} className="px-4 py-3 text-center font-semibold text-slate-600">
@@ -858,3 +874,4 @@ export default function GpaManagementPage() {
     </>
   );
 }
+

@@ -1,3 +1,4 @@
+
 import {
   GraduationCap,
   Building2,
@@ -18,25 +19,25 @@ const features = [
     icon: ShieldCheck,
     title: "Department Verification & Approval",
     body: "Verify student registrations, approve accounts, and manage internship-related approvals through a secure department portal.",
-    bgColor: "bg-[#1B4472]/90 hover:bg-[#16385F]",
+    bgColor: "bg-[#1B3F68]/90 hover:bg-[#16385F]",
   },
   {
     icon: TrendingUp,
     title: "Academic Performance",
     body: "Monitor your academic performance by viewing your GPA, semester results, and overall academic progress in one place.",
-    bgColor: "bg-[#1B4472]/90 hover:bg-[#16385F]",
+    bgColor: "bg-[#1B3F68]/90 hover:bg-[#16385F]",
   },
   {
     icon: BookOpen,
     title: "Digital Record Book",
     body: "Track internship progress with real-time digital logs and organized activity records.",
-    bgColor: "bg-[#1B4472]/90 hover:bg-[#16385F]",
+    bgColor: "bg-[#1B3F68]/90 hover:bg-[#16385F]",
   },
   {
     icon: FileText,
     title: "Efficient Reporting",
     body: "Generate insightful evaluation reports to track student performance and internship progress efficiently.",
-    bgColor: "bg-[#1B4472]/90 hover:bg-[#16385F]",
+    bgColor: "bg-[#1B3F68]/90 hover:bg-[#16385F]",
   },
 ];
 
@@ -51,16 +52,16 @@ export default function Home() {
         className="text-white relative overflow-hidden"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(11,21,40,0.45), rgba(11,21,40,0.82)), url('/intern.jpg')",
+            "linear-gradient(rgba(11,21,40,0.25), rgba(11,21,40,0.82)), url('/intern.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="mx-auto max-w-6xl px-6 py-28 text-center relative z-10">
+       <div className="mx-auto max-w-6xl px-6 py-28 text-center relative z-10">
           {/* Top Badge with Department Name */}
-          <div className="inline-flex items-center gap-2.5 rounded-full bg-blue-500/15 border border-sky-300/30 px-5 py-1.5 text-xs font-bold uppercase tracking-widest text-sky-200 mb-8 backdrop-blur-md shadow-lg shadow-black/10">
-            <ShieldCheck className="h-4 w-4 text-sky-300" />
+          <div className="inline-flex items-center gap-2.5 rounded-full bg-blue-950/60 border border-sky-500/30 px-5 py-1.5 text-xs font-bold uppercase tracking-widest text-sky-300 mb-8 backdrop-blur-md shadow-lg">
+            <ShieldCheck className="h-4 w-4 text-sky-400" />
             Department of Computer Science • University of Ruhuna
           </div>
 
@@ -126,7 +127,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="bg-[#22364D] border-b border-[#18283B]">
+      <section className="bg-[#415F88] border-b border-[#18283B]">
         <div className="mx-auto max-w-6xl px-6 py-24">
           <h2 className="text-center text-3xl font-extrabold text-white tracking-normal sm:text-4xl">
             Centralized Internship Process
@@ -162,7 +163,7 @@ export default function Home() {
       </section>
 
       {/* Gateway */}
-      <section className="bg-[#18283B] text-white">
+      <section className="bg-[#2B466A] text-white">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-24 md:grid-cols-2">
           <div className="space-y-6">
             <span className="text-xs font-bold uppercase tracking-widest text-sky-400 bg-sky-950/60 border border-sky-800/50 px-3 py-1 rounded-md">
@@ -173,14 +174,14 @@ export default function Home() {
               Your gateway to professional excellence
             </h2>
 
-            <p className="leading-relaxed text-slate-300/90 text-sm sm:text-base font-light tracking-wide">
+            <p className="leading-relaxed text-slate-300 text-sm sm:text-base font-light tracking-wide">
               Empowering the Department of Computer Science to manage internship programs efficiently through a centralized platform. The system simplifies student verification, account management, academic performance tracking, internship approvals, and digital record book management.
             </p>
 
             <div className="pt-2">
               <LinkButton 
                 href="/student/auth" 
-                className="bg-[#1B4472] text-white hover:bg-[#16385F] font-semibold px-7 py-3.5 rounded-xl shadow-lg transition-all inline-flex items-center gap-2.5 border border-sky-400/30 hover:border-sky-300 tracking-wide"
+                className="bg-[#1B4472] text-white hover:bg-[#16385F] font-semibold px-7 py-3.5 rounded-xl shadow-lg transition-all inline-flex items-center gap-2.5 border border-sky-300 hover:border-sky-300 tracking-wide"
               >
                 Get Started
               </LinkButton>
@@ -248,4 +249,5 @@ function PortalCard({
     </div>
   );
 }
+
 

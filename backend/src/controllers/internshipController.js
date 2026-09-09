@@ -2,6 +2,7 @@ const InternshipApplication = require("../models/InternshipApplication");
 const User = require("../models/User");
 const Log = require("../models/Log");
 const StudentProfile = require("../models/StudentProfile");
+const Notification = require("../models/Notification");
 
 async function listMine(req, res) {
   try {
@@ -144,6 +145,26 @@ async function review(req, res) {
 
     if (!application) return res.status(404).json({ message: "Application not found" });
 
+    if (approved === true) {
+      await Notification.updateOne(
+        {
+          user: application.user._id,
+          type: "internship_approved",
+          referenceId: application._id,
+        },
+        {
+          $setOnInsert: {
+            user: application.user._id,
+            type: "internship_approved",
+            message: "Your internship has been approved. You can now update your Record Book.",
+            referenceId: application._id,
+            navigationPath: "/student/internship-status",
+          },
+        },
+        { upsert: true },
+      );
+    }
+
     // Log the audit actions
     const studentId = application.user?.studentId || "";
     await Log.create({
@@ -160,3 +181,4 @@ async function review(req, res) {
 }
 
 module.exports = { listMine, createMine, updateMine, deleteMine, listAll, review };
+

@@ -60,12 +60,15 @@ function classify(gpa: number): string {
 }
 
 function classifyColor(gpa: number): string {
-  if (gpa >= 3.7) return "text-emerald-600";
-  if (gpa >= 3.3) return "text-sky-600";
-  if (gpa >= 3.0) return "text-blue-600";
-  if (gpa >= 2.0) return "text-amber-600";
-  return "text-rose-600";
+  if (gpa >= 3.7) return "text-emerald-400";
+  if (gpa >= 3.3) return "text-sky-400";
+  if (gpa >= 3.0) return "text-blue-400";
+  if (gpa >= 2.0) return "text-amber-400";
+  return "text-rose-400";
 }
+
+// Dashboard-matching cycle for semester accordion accents — visual only.
+const semesterAccent = ["#2F5F98", "#486FAE", "#344B7A"];
 
 export default function AcademicPerformancePage() {
   useAuthGuard("student", "/student/login");
@@ -98,24 +101,24 @@ export default function AcademicPerformancePage() {
   }, [ready, user]);
 
   if (!ready || user?.role !== "student") {
-    return <main className="flex flex-1 min-h-screen items-center justify-center bg-sky text-navy-deep">Loading…</main>;
+    return <main className="flex flex-1 min-h-screen items-center justify-center bg-[#D4E9FC] text-[#3F5D82]">Loading…</main>;
   }
 
   return (
     <>
       <StudentNav />
-      <main className="flex-1 bg-sky min-h-screen">
+      <main className="flex-1 min-h-screen pb-16 relative overflow-hidden bg-[#9bc6d9]">
         <div className="mx-auto max-w-5xl px-6 py-10">
           <div className="mb-8">
-            <p className="text-xs font-bold uppercase tracking-widest text-navy-deep/60">Academic Record</p>
-            <h1 className="mt-1 text-3xl font-extrabold text-navy-deep">Academic Performance</h1>
-            <p className="mt-1 text-sm text-navy-deep/60">Your published semester results and cumulative GPA.</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#3F5D82]">Academic Record</p>
+            <h1 className="mt-1 text-3xl font-extrabold text-[#0F2747]">Academic Performance</h1>
+            <p className="mt-1 text-sm text-[#3F5D82]">Your published semester results and cumulative GPA.</p>
           </div>
 
           {/* Loading */}
           {loading && (
-            <div className="flex h-48 items-center justify-center rounded-2xl bg-white/80">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-navy-deep/30 border-t-navy-deep" />
+            <div className="flex h-48 items-center justify-center rounded-2xl bg-[#3F5D82] text-white">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/30 border-t-white" />
             </div>
           )}
 
@@ -129,10 +132,10 @@ export default function AcademicPerformancePage() {
 
           {/* No results yet */}
           {!loading && !error && data && data.semesters.length === 0 && (
-            <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-white/80 py-20 text-center shadow-xs">
-              <BookOpen className="h-14 w-14 text-navy-deep/20" />
-              <h2 className="text-xl font-bold text-navy-deep/60">Results have not been published yet.</h2>
-              <p className="max-w-xs text-sm text-navy-deep/40">
+            <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-[#3F5D82] py-20 text-center shadow-lg text-white">
+              <BookOpen className="h-14 w-14 text-white/40" />
+              <h2 className="text-xl font-bold text-white/90">Results have not been published yet.</h2>
+              <p className="max-w-xs text-sm text-white/65">
                 Your academic results will appear here once your department publishes them. Please check back later.
               </p>
             </div>
@@ -143,25 +146,25 @@ export default function AcademicPerformancePage() {
             <div className="space-y-6">
               {/* CGPA Summary Card */}
               <div className="grid gap-4 sm:grid-cols-3">
-                <div className="rounded-2xl bg-navy-deep px-6 py-5 text-white sm:col-span-1">
+                <div className="rounded-2xl bg-[#3F5D82] px-6 py-5 text-white sm:col-span-1 shadow-lg border border-white/10">
                   <p className="text-xs font-bold uppercase tracking-wider text-white/60">Cumulative GPA</p>
                   <p className="mt-2 text-5xl font-black">
                     {data.cgpa !== null ? data.cgpa.toFixed(2) : "—"}
                     <span className="ml-1 text-xl font-normal text-white/60">/4.0</span>
                   </p>
                   {data.cgpa !== null && (
-                    <p className={`mt-2 text-sm font-semibold ${classifyColor(data.cgpa)} brightness-150`}>
+                    <p className={`mt-2 text-sm font-semibold ${classifyColor(data.cgpa)}`}>
                       {classify(data.cgpa)}
                     </p>
                   )}
                 </div>
-                <div className="rounded-2xl bg-white/80 px-6 py-5 shadow-xs">
-                  <p className="text-xs font-bold uppercase tracking-wider text-navy-deep/60">Semesters Completed</p>
-                  <p className="mt-2 text-5xl font-black text-navy-deep">{data.semesters.length}</p>
+                <div className="rounded-2xl bg-[#3F5D82] px-6 py-5 shadow-lg border border-white/10 text-white">
+                  <p className="text-xs font-bold uppercase tracking-wider text-white/60">Semesters Completed</p>
+                  <p className="mt-2 text-5xl font-black text-white">{data.semesters.length}</p>
                 </div>
-                <div className="rounded-2xl bg-white/80 px-6 py-5 shadow-xs">
-                  <p className="text-xs font-bold uppercase tracking-wider text-navy-deep/60">Total Credits</p>
-                  <p className="mt-2 text-5xl font-black text-navy-deep">
+                <div className="rounded-2xl bg-[#3F5D82] px-6 py-5 shadow-lg border border-white/10 text-white">
+                  <p className="text-xs font-bold uppercase tracking-wider text-white/60">Total Credits</p>
+                  <p className="mt-2 text-5xl font-black text-white">
                     {data.semesters.reduce((s, sem) => s + sem.totalCredits, 0)}
                   </p>
                 </div>
@@ -170,40 +173,45 @@ export default function AcademicPerformancePage() {
               {/* Semester Accordions — strictly chronological by semesterNumber */}
               {[...data.semesters]
                 .sort((a, b) => a.semesterNumber - b.semesterNumber)
-                .map(sem => (
-                  <div key={sem.semesterId} className="overflow-hidden rounded-2xl bg-white/80 shadow-xs">
+                .map((sem, idx) => {
+                  const accent = semesterAccent[idx % semesterAccent.length];
+                  return (
+                  <div key={sem.semesterId} className="overflow-hidden rounded-2xl bg-[#3F5D82] shadow-lg border border-white/10 text-white">
                     {/* Accordion Header */}
                     <button
-                      className="flex w-full items-center gap-4 px-6 py-4 text-left hover:bg-slate-50/60 transition"
+                      className="flex w-full items-center gap-4 px-6 py-4 text-left hover:bg-[#2F5F98]/40 transition"
                       onClick={() => setOpenSem(o => o === sem.semesterId ? null : sem.semesterId)}
                     >
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy-deep text-white text-sm font-black">
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white text-sm font-black shadow-sm"
+                        style={{ backgroundColor: accent }}
+                      >
                         {sem.semesterNumber}
                       </div>
                       <div className="flex-1">
-                        <p className="font-bold text-navy-deep text-sm">{sem.label || `Semester ${sem.semesterNumber}`}</p>
-                        <p className="text-xs text-slate-400">{sem.academicYear}</p>
+                        <p className="font-bold text-white text-sm">{sem.label || `Semester ${sem.semesterNumber}`}</p>
+                        <p className="text-xs text-white/60">{sem.academicYear}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-black text-navy-deep">{sem.semesterGPA.toFixed(2)}</p>
+                        <p className="text-lg font-black text-white">{sem.semesterGPA.toFixed(2)}</p>
                         <p className={`text-xs font-semibold ${classifyColor(sem.semesterGPA)}`}>{classify(sem.semesterGPA)}</p>
                       </div>
-                      <TrendingUp className={`h-4 w-4 shrink-0 transition-transform ${openSem === sem.semesterId ? "rotate-180 text-navy-deep" : "text-slate-300"}`} />
+                      <TrendingUp className={`h-4 w-4 shrink-0 transition-transform ${openSem === sem.semesterId ? "rotate-180 text-white" : "text-white/40"}`} />
                     </button>
 
                     {/* Accordion Body — Subject results */}
                     {openSem === sem.semesterId && (
-                      <div className="border-t border-slate-100 px-6 pb-5 pt-4">
+                      <div className="border-t border-white/10 px-6 pb-5 pt-4 bg-[#12365e]">
                         {/* MC Note if applicable */}
                         {sem.subjects.some(s => s.grade === "MC") && (
-                          <div className="mb-3 flex items-center gap-2 rounded-lg bg-purple-50 px-3 py-2 text-xs text-purple-700">
+                          <div className="mb-3 flex items-center gap-2 rounded-lg bg-purple-900/40 border border-purple-500/30 px-3 py-2 text-xs text-purple-200">
                             <Award className="h-3.5 w-3.5 shrink-0" />
                             <span><strong>MC (Medical Certificate)</strong> subjects are shown but excluded from GPA calculation.</span>
                           </div>
                         )}
 
                         <table className="w-full text-sm">
-                          <thead className="border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400">
+                          <thead className="border-b border-white/10 text-xs font-bold uppercase tracking-wider text-white/60">
                             <tr>
                               <th className="pb-2 text-left">Subject Code</th>
                               <th className="pb-2 text-center">Credits</th>
@@ -212,34 +220,34 @@ export default function AcademicPerformancePage() {
                               <th className="pb-2 text-right">GPA Impact</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-50">
+                          <tbody className="divide-y divide-white/5">
                             {sem.subjects.map(sub => (
                               <tr key={sub.subjectCode}>
-                                <td className="py-2.5 font-mono font-bold text-navy-deep">{sub.subjectCode}</td>
-                                <td className="py-2.5 text-center text-slate-600">{sub.credits}</td>
+                                <td className="py-2.5 font-mono font-bold text-white">{sub.subjectCode}</td>
+                                <td className="py-2.5 text-center text-white/80">{sub.credits}</td>
                                 <td className="py-2.5 text-center">
                                   <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-black ${gradeBadgeClass(sub.grade)}`}>
                                     {sub.grade}
                                   </span>
                                 </td>
-                                <td className="py-2.5 text-center text-slate-600">{sub.gradePoint.toFixed(1)}</td>
+                                <td className="py-2.5 text-center text-white/80">{sub.gradePoint.toFixed(1)}</td>
                                 <td className="py-2.5 text-right">
                                   {sub.grade === "MC" ? (
-                                    <span className="text-xs text-purple-500 font-medium italic">Excluded (MC)</span>
+                                    <span className="text-xs text-purple-300 font-medium italic">Excluded (MC)</span>
                                   ) : (
-                                    <span className="text-xs text-slate-500">{(sub.credits * sub.gradePoint).toFixed(1)} pts</span>
+                                    <span className="text-xs text-white/70">{(sub.credits * sub.gradePoint).toFixed(1)} pts</span>
                                   )}
                                 </td>
                               </tr>
                             ))}
                           </tbody>
-                          <tfoot className="border-t-2 border-slate-200">
+                          <tfoot className="border-t-2 border-white/15">
                             <tr>
-                              <td colSpan={2} className="pt-3 text-xs font-bold uppercase text-slate-400">Semester Total</td>
+                              <td colSpan={2} className="pt-3 text-xs font-bold uppercase text-white/65">Semester Total</td>
                               <td />
                               <td />
-                              <td className="pt-3 text-right font-black text-navy-deep">
-                                GPA: {sem.semesterGPA.toFixed(2)} <span className="text-slate-400 font-normal text-xs">({sem.totalCredits} cr)</span>
+                              <td className="pt-3 text-right font-black text-white">
+                                GPA: {sem.semesterGPA.toFixed(2)} <span className="text-white/60 font-normal text-xs">({sem.totalCredits} cr)</span>
                               </td>
                             </tr>
                           </tfoot>
@@ -247,7 +255,8 @@ export default function AcademicPerformancePage() {
                       </div>
                     )}
                   </div>
-                ))}
+                  );
+                })}
             </div>
           )}
         </div>

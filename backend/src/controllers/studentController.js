@@ -81,7 +81,15 @@ async function getDashboardStats(req, res) {
   try {
     const registrationRequestsCount = await AccountRequest.countDocuments({ status: "pending" });
     const activeStudentsCount = await require("../models/User").countDocuments({ role: "student" });
-    const pendingApprovalsCount = await InternshipApplication.countDocuments({ approved: false, state: "selected" });
+    const pendingApprovalsCount = await InternshipApplication.countDocuments({
+      approved: false,
+      state: "selected",
+      $or: [
+        { rejectionReason: { $exists: false } },
+        { rejectionReason: null },
+        { rejectionReason: "" },
+      ],
+    });
 
     const { specialization, gpa, internType } = req.query;
 

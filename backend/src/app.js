@@ -21,6 +21,7 @@ const academicYearRoutes = require("./routes/academicYearRoutes");
 const semesterRoutes = require("./routes/semesterRoutes");
 const gpaSubjectRoutes = require("./routes/gpaSubjectRoutes");
 const resultsRoutes = require("./routes/resultsRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 
@@ -58,6 +59,7 @@ app.use("/api/academic-years", academicYearRoutes);
 app.use("/api/semesters", semesterRoutes);
 app.use("/api/gpa-subjects", gpaSubjectRoutes);
 app.use("/api/results", resultsRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

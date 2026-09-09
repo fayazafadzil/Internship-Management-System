@@ -353,3 +353,4 @@ export default function DepartmentVerificationPage() {
     </div>
   );
 }
+

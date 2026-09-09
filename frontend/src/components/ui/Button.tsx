@@ -37,3 +37,4 @@ export function LinkButton({
 }: LinkButtonProps) {
   return <Link className={cx(base, variants[variant], className)} {...props} />;
 }
+
