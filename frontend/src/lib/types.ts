@@ -95,6 +95,15 @@ export interface StudentProfile {
   additionalItemsFileName?: string;
   additionalItemsMimeType?: string;
   additionalItemsDataUrl?: string;
+  certifications?: PortfolioFile[];
+  additionalPortfolioItems?: PortfolioFile[];
+}
+
+export interface PortfolioFile {
+  id: string;
+  name: string;
+  mimeType: string;
+  url: string;
 }
 
 export interface PortfolioData {

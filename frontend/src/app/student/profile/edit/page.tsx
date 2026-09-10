@@ -89,8 +89,8 @@ export default function ProfileEditPage() {
   if (!ready || user?.role !== "student") {
     return (
       <main className="flex flex-1 items-center justify-center bg-[#AEC0D4] text-slate-800 min-h-screen font-bold">
-        <div className="flex items-center gap-3 bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-200">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-800 border-t-transparent" />
+        <div className="flex items-center gap-3 bg-[#D4E9FC] px-6 py-3 rounded-2xl shadow-sm border border-[#1B4472]/20">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#1B4472] border-t-transparent" />
           <span>Loading Academic Profile…</span>
         </div>
       </main>
@@ -105,23 +105,23 @@ export default function ProfileEditPage() {
           
           <form
             onSubmit={handleSubmit}
-            className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-10 shadow-xl border border-white/40 transition-all text-slate-800"
+            className="w-full max-w-2xl rounded-3xl bg-[#D4E9FC] p-6 sm:p-10 shadow-xl border border-white/60 transition-all text-slate-800"
           >
-            <div className="border-b border-slate-100 pb-5">
+            <div className="border-b border-[#1B4472]/10 pb-5">
               <div className="flex items-center gap-3.5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-800">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1B4472] text-white">
                   <ShieldCheck className="h-6 w-6" />
                 </div>
                 <div>
                   <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Academic Identity</h1>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
                     Provide details as they appear on official enrollment records.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 flex flex-col sm:flex-row items-center gap-5 rounded-2xl bg-slate-50 p-4 border border-slate-200/80">
+            <div className="mt-6 flex flex-col sm:flex-row items-center gap-5 rounded-2xl bg-white/70 p-4 border border-[#1B4472]/15 shadow-sm">
               <div className="relative group shrink-0">
                 <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-slate-200 ring-4 ring-white shadow-md transition-transform group-hover:scale-105">
                   {form.photo ? (
@@ -133,7 +133,7 @@ export default function ProfileEditPage() {
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
-                  className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-white shadow-md hover:bg-slate-700 hover:scale-110 active:scale-95 transition-all"
+                  className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-[#1B4472] text-white shadow-md hover:bg-[#294B72] hover:scale-110 active:scale-95 transition-all"
                   title="Upload Photo"
                 >
                   <Camera className="h-3.5 w-3.5" />
@@ -143,7 +143,7 @@ export default function ProfileEditPage() {
 
               <div className="flex flex-col text-center sm:text-left">
                 <h2 className="font-bold text-slate-900 text-sm sm:text-base">Profile Photo</h2>
-                <p className="text-xs text-slate-500 max-w-xs mt-0.5 leading-relaxed">
+                <p className="text-xs text-slate-600 max-w-xs mt-0.5 leading-relaxed">
                   Upload a clear professional headshot with a solid background (400x400px recommended).
                 </p>
               </div>
@@ -156,7 +156,7 @@ export default function ProfileEditPage() {
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder="Enter your full name"
-                  className="h-10 bg-white text-slate-900 border-slate-300 focus:border-slate-800 focus:ring-2 focus:ring-slate-800/20 rounded-xl text-sm font-medium"
+                  className="h-10 bg-white/90 text-slate-900 border-slate-300 focus:border-[#1B4472] focus:ring-2 focus:ring-[#1B4472]/20 rounded-xl text-sm font-medium"
                   required
                 />
               </div>
@@ -167,7 +167,7 @@ export default function ProfileEditPage() {
                   <Input
                     value={form.studentId}
                     disabled
-                    className="h-10 bg-slate-100 text-slate-600 border-slate-200 rounded-xl font-mono text-xs font-semibold cursor-not-allowed"
+                    className="h-10 bg-white/50 text-slate-600 border-slate-200 rounded-xl font-mono text-xs font-semibold cursor-not-allowed"
                   />
                 </div>
 
@@ -177,7 +177,7 @@ export default function ProfileEditPage() {
                     type="email"
                     value={form.email}
                     disabled
-                    className="h-10 bg-slate-100 text-slate-600 border-slate-200 rounded-xl text-xs font-semibold cursor-not-allowed"
+                    className="h-10 bg-white/50 text-slate-600 border-slate-200 rounded-xl text-xs font-semibold cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -190,7 +190,7 @@ export default function ProfileEditPage() {
                   value={form.specialization}
                   disabled={locked}
                   onChange={(e) => setForm({ ...form, specialization: e.target.value as Specialization | "" })}
-                  className="h-10 bg-white text-slate-900 border-slate-300 focus:border-slate-800 focus:ring-2 focus:ring-slate-800/20 rounded-xl text-xs font-medium disabled:bg-slate-100 disabled:text-slate-600"
+                  className="h-10 bg-white/90 text-slate-900 border-slate-300 focus:border-[#1B4472] focus:ring-2 focus:ring-[#1B4472]/20 rounded-xl text-xs font-medium disabled:bg-white/50 disabled:text-slate-600 cursor-pointer"
                 >
                   <option value="">Select your specialization</option>
                   {SPECIALIZATIONS.map((s) => (
@@ -204,8 +204,8 @@ export default function ProfileEditPage() {
               <label
                 className={`flex items-start gap-3 rounded-xl p-3.5 transition-all border ${
                   locked
-                    ? "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed"
-                    : "bg-slate-50 border-slate-200 hover:bg-slate-100/70 cursor-pointer"
+                    ? "bg-white/50 border-slate-200 opacity-80 cursor-not-allowed"
+                    : "bg-white/70 border-[#1B4472]/15 hover:bg-white/90 cursor-pointer"
                 }`}
               >
                 <input
@@ -213,7 +213,7 @@ export default function ProfileEditPage() {
                   checked={locked || confirm}
                   disabled={locked}
                   onChange={(e) => setConfirm(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-slate-800 focus:ring-slate-800 cursor-pointer accent-slate-800"
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#1B4472] focus:ring-[#1B4472] cursor-pointer accent-[#1B4472]"
                 />
                 <span className="text-xs text-slate-700">
                   <span className="font-bold block text-slate-900">I confirm that this is my correct specialization</span>
@@ -231,10 +231,10 @@ export default function ProfileEditPage() {
               )}
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+            <div className="mt-6 pt-4 border-t border-[#1B4472]/10 flex justify-end">
               <Button
                 type="submit"
-                className="w-full sm:w-auto px-7 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95"
+                className="w-full sm:w-auto px-7 py-3 bg-[#1B4472] hover:bg-[#294B72] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95"
               >
                 Save & Continue →
               </Button>
@@ -247,3 +247,4 @@ export default function ProfileEditPage() {
     </div>
   );
 }
+

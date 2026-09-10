@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  Pencil, IdCard, Mail, Link2, Code2, Calculator, FileText, 
+  Pencil, IdCard, Mail, Calculator, FileText, 
   Star, User as UserIcon, BookOpen, GraduationCap, ArrowRight
 } from "lucide-react";
 import { StudentNav } from "@/components/layout/StudentNav";
@@ -113,8 +113,26 @@ export default function ManagementHub() {
               <div className="relative mt-7">
                 <p className="text-[10px] font-bold tracking-widest text-white mb-3 px-1">PROFESSIONAL LINKS</p>
                 <div className="space-y-2">
-                  <LinkInput icon={<Link2 className="h-3.5 w-3.5" />} placeholder="Enter LinkedIn URL" value={safeProfile.linkedin ?? ""} onChange={(v) => updateLink("linkedin", v)} />
-                  <LinkInput icon={<Code2 className="h-3.5 w-3.5" />} placeholder="Enter GitHub URL" value={safeProfile.github ?? ""} onChange={(v) => updateLink("github", v)} />
+                  <LinkInput 
+                    icon={
+                      <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                      </svg>
+                    } 
+                    placeholder="Enter LinkedIn URL" 
+                    value={safeProfile.linkedin ?? ""} 
+                    onChange={(v) => updateLink("linkedin", v)} 
+                  />
+                  <LinkInput 
+                    icon={
+                      <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+                      </svg>
+                    } 
+                    placeholder="Enter GitHub URL" 
+                    value={safeProfile.github ?? ""} 
+                    onChange={(v) => updateLink("github", v)} 
+                  />
                 </div>
               </div>
             </aside>
@@ -171,7 +189,7 @@ function ModuleCard({
 function LinkInput({ icon, placeholder, value, onChange }: { icon: React.ReactNode; placeholder: string; value: string; onChange: (value: string) => void; }) {
   return (
     <div className="group/input flex items-center gap-2.5 rounded-xl border border-white/25 bg-white/15 backdrop-blur-md px-3 py-2.5 shadow-sm transition-all duration-300 hover:bg-white/[0.2] hover:border-white/40 hover:shadow-md hover:shadow-[#2563EB]/10 focus-within:border-[#60A5FA] focus-within:bg-white/25 focus-within:ring-2 focus-within:ring-[#60A5FA]/40">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#2563EB]/35 text-[#60A5FA] transition-colors duration-300 group-hover/input:bg-[#2563EB]/60 group-hover/input:text-white">
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#0B2545] text-white/80 border border-white/10">
         {icon}
       </div>
       <input

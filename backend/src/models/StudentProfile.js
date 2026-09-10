@@ -38,6 +38,8 @@ const studentProfileSchema = new mongoose.Schema(
     additionalItemsFileName: String,
     additionalItemsMimeType: String,
     additionalItemsDataUrl: String,
+    certifications: [portfolioFileSchema],
+    additionalPortfolioItems: [portfolioFileSchema],
   },
   { timestamps: true },
 );

@@ -72,7 +72,7 @@ export default function DepartmentAuthPage() {
         
         <div className="mx-auto w-full max-w-md overflow-hidden rounded-3xl shadow-2xl shadow-[#32467C]/20 ring-1 ring-navy-deep/10 bg-white">
           
-          {/* Header එකට #32467C වර්ණය සහිත Gradient එකක් ලබා දී ඇත */}
+
           <div className="bg-gradient-to-br from-[#32467C] to-[#253560] px-8 py-6 text-center text-white">
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
               <Building2 className="h-6 w-6" />
@@ -90,7 +90,7 @@ export default function DepartmentAuthPage() {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <Field label="University Email" htmlFor="email">
+              <Field label="Username" htmlFor="email">
                 <Input
                   id="email"
                   type="email"
@@ -113,7 +113,7 @@ export default function DepartmentAuthPage() {
 
               {error && <p className="text-xs text-red-600">{error}</p>}
 
-              {/* Button එකට #32467C වර්ණය ලබා දී ඇත */}
+             
               <Button type="submit" className="w-full py-2.5 mt-2 bg-[#32467C] hover:bg-[#253560] transition-all shadow-lg shadow-[#32467C]/30" disabled={loading}>
                 {loading ? "Logging in..." : "Login"}
               </Button>
