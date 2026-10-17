@@ -63,9 +63,7 @@ export default function DepartmentProfileEditPage() {
             <section className="rounded-[32px] bg-white px-8 py-10 text-center shadow-xs border border-slate-100">
               <h2 className="text-2xl font-extrabold text-navy-deep">Profile Photo</h2>
               
-              <p className="mx-auto mt-2 max-w-xs text-sm text-navy-deep/70">
-                Add a clear, formal photo for your identification in the system.
-              </p>
+              
 
               <div className="relative mx-auto mt-8 w-fit">
                 <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-navy-deep bg-slate-50 shadow-inner">
@@ -102,8 +100,7 @@ export default function DepartmentProfileEditPage() {
               <div className="mt-6 flex items-start gap-3 rounded-xl bg-sky-50 px-4 py-4 text-left text-sm text-sky-800 border border-sky-100">
                 <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-600" />
                 <p className="text-xs font-medium leading-relaxed">
-                  This photo will be visible on student internship certificates
-                  and faculty directories.
+                  This official logo/image will be visible on department-issued internship documents and faculty directories.
                 </p>
               </div>
 

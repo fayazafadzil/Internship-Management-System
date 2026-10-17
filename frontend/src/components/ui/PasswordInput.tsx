@@ -16,11 +16,11 @@ export function PasswordInput({ inputClassName, className, ...props }: Props) {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className={cx("relative", className)}>
+    <div className={cx("relative w-full", className)}>
       <input
         type={visible ? "text" : "password"}
         className={cx(
-          "w-full rounded-lg border border-white/40 bg-white/5 px-4 py-3 pr-12 text-sm text-black placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-periwinkle/60",
+          "w-full rounded-lg px-4 py-3 pr-12 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none",
           inputClassName,
         )}
         {...props}
@@ -29,7 +29,7 @@ export function PasswordInput({ inputClassName, className, ...props }: Props) {
         type="button"
         onClick={() => setVisible((v) => !v)}
         aria-label={visible ? "Hide password" : "Show password"}
-        className="absolute inset-y-0 right-2 my-2 flex w-9 items-center justify-center rounded-md bg-white/85 text-navy-deep transition-colors hover:bg-white"
+        className="absolute inset-y-0 right-2 my-auto h-8 w-8 flex items-center justify-center rounded-md text-slate-500 hover:text-slate-800 transition-colors"
       >
         {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
       </button>

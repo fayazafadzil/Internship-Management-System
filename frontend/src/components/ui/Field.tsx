@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 function cx(...parts: Array<string | undefined | false>) {
   return parts.filter(Boolean).join(" ");
@@ -32,7 +32,7 @@ export function Field({
   htmlFor,
   children,
 }: {
-  label: React.ReactNode;
+  label: ReactNode;
   htmlFor?: string;
   children: React.ReactNode;
 }) {
@@ -43,3 +43,4 @@ export function Field({
     </div>
   );
 }
+

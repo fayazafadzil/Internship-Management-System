@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link"; // Link එක import කරන්න
-import { Building2, ArrowLeft } from "lucide-react"; // ArrowLeft අයිකනය එක් කරන්න
+import Link from "next/link";
+import { Building2, ArrowLeft } from "lucide-react";
+import { LandingNav } from "@/components/layout/LandingNav";
 import { Footer } from "@/components/layout/Footer";
 import { Field, Input } from "@/components/ui/Field";
 import { Button } from "@/components/ui/Button";
@@ -62,39 +63,38 @@ export default function DepartmentAuthPage() {
   };
 
   return (
-    <main className="flex-1 bg-sky-soft">
-      <div className="mx-auto max-w-md px-6 py-10">
-        {/* මෙතැනදී BackToDashboard වෙනුවට Link එක යොදා ඇත */}
-        <div className="mb-6">
-          <Link href="/" className="inline-flex items-center text-sm font-medium text-navy-deep hover:underline">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Link>
-        </div>
+    <main className="flex min-h-screen flex-col justify-between" style={{ backgroundColor: "#AEC0D4" }}>
+      
+      {/* Landing Navigation එක මෙතනින් එකතු කළා */}
+      <LandingNav />
 
-        <div className="overflow-hidden rounded-3xl shadow-2xl ring-1 ring-navy-deep/10">
-          <div className="bg-navy-deep px-10 py-10 text-center text-white">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-white/15">
-              <Building2 className="h-8 w-8" />
+      <div className="w-full px-6 pt-6 pb-12 my-auto">
+        
+        <div className="mx-auto w-full max-w-md overflow-hidden rounded-3xl shadow-2xl shadow-[#32467C]/20 ring-1 ring-navy-deep/10 bg-white">
+          
+
+          <div className="bg-gradient-to-br from-[#32467C] to-[#253560] px-8 py-6 text-center text-white">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+              <Building2 className="h-6 w-6" />
             </div>
-            <h1 className="text-3xl font-semibold">Department Portal</h1>
-            <p className="mt-3 max-w-sm mx-auto text-sm text-white/75">
+            <h1 className="text-2xl font-semibold tracking-tight">Department Portal</h1>
+            <p className="mt-1 text-xs text-blue-100/80">
               Use your university email and the default password provided by the system administrator.
             </p>
           </div>
 
-          <div className="bg-panel px-10 py-10">
-            <h2 className="text-xl font-semibold text-navy-deep">Department Login</h2>
-            <p className="mt-2 text-sm text-slate-600">
+          <div className="bg-white px-8 py-6">
+            <h2 className="text-lg font-semibold text-navy-deep">Department Login</h2>
+            <p className="text-xs text-slate-500 mb-4">
               Login only. Department accounts are created and managed by the administrator.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-              <Field label="University Email" htmlFor="email">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Field label="Username" htmlFor="email">
                 <Input
                   id="email"
                   type="email"
-                  placeholder="department@university.example"
+                  placeholder="department@dcs.ruh.ac.lk"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -105,22 +105,23 @@ export default function DepartmentAuthPage() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </Field>
 
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              {error && <p className="text-xs text-red-600">{error}</p>}
 
-              <Button type="submit" className="w-full py-3.5" disabled={loading}>
+             
+              <Button type="submit" className="w-full py-2.5 mt-2 bg-[#32467C] hover:bg-[#253560] transition-all shadow-lg shadow-[#32467C]/30" disabled={loading}>
                 {loading ? "Logging in..." : "Login"}
               </Button>
             </form>
           </div>
         </div>
       </div>
+
       <Footer />
     </main>
   );

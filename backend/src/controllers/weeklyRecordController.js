@@ -58,9 +58,9 @@ async function createRecord(req, res) {
       return res.status(400).json({ message: "Record for this week already exists. Use PUT to edit." });
     }
     
-    // Check deadline (Week End + 3 days)
+    // Check deadline (week end at 11:59 PM)
     const deadline = new Date(expectedEnd);
-    deadline.setDate(deadline.getDate() + 3);
+    deadline.setHours(23, 59, 59, 999);
     const isLateSubmission = new Date() > deadline;
 
     const record = await WeeklyRecord.create({
@@ -95,9 +95,9 @@ async function updateRecord(req, res) {
     const expectedEnd = new Date(record.weekEnd);
     expectedEnd.setHours(23,59,59,999);
     
-    // Check deadline (Week End + 3 days)
+    // Check deadline (week end at 11:59 PM)
     const deadline = new Date(expectedEnd);
-    deadline.setDate(deadline.getDate() + 3);
+    deadline.setHours(23, 59, 59, 999);
     
     if (new Date() > deadline) {
       return res.status(400).json({ message: "Deadline has passed. You cannot re-upload the record." });
@@ -154,3 +154,4 @@ module.exports = {
   updateRecord,
   listStudentRecords,
 };
+

@@ -20,11 +20,13 @@ async function connectDB() {
         email: "department@ruh.ac.lk",
         password: hashedPassword,
         departmentProfile: {
-          fullName: "Department Administrator",
-          universityId: "DEPT-ADMIN-01",
-          designation: "Head of Department",
-          academicTitle: "Professor",
-          contactNumber: "+94 41 222 2624",
+         
+         //fullName: "Department Administrator",
+          //universityId: "DEPT-ADMIN-01",
+          //designation: "Head of Department",
+          //academicTitle: "Professor",
+          //contactNumber: "+94 41 222 2624",
+         
           email: "department@ruh.ac.lk",
         }
       });

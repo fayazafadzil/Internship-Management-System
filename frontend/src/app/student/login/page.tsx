@@ -4,8 +4,8 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import { LandingNav } from "@/components/layout/LandingNav";
 import { Footer } from "@/components/layout/Footer";
-import { PasswordInput } from "@/components/ui/PasswordInput";
 import { useAuth } from "@/context/AuthContext";
 
 function LoginForm() {
@@ -63,6 +63,10 @@ function LoginForm() {
 
   return (
     <div className="flex min-h-screen flex-col justify-between bg-[#AEC0D4]">
+      
+      {/* Landing Navigation එක මෙතනින් එකතු කළා */}
+      <LandingNav />
+
       {/* Content Wrapper */}
       <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         
@@ -90,7 +94,7 @@ function LoginForm() {
             {/* Title Section */}
             <div className="text-center">
               <h1 className="text-3xl font-extrabold tracking-tight text-[#1B4472]">IMS</h1>
-              <p className="mt-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-[#1B4472]/60">
+              <p className="mt-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-[#1B4472]">
                 University System
               </p>
             </div>
@@ -111,7 +115,7 @@ function LoginForm() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="student@university.ruh.ac.lk"
+                  placeholder="e.g. kamal12769@sci.ruh.ac.lk"
                   required
                   className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#1B4472] focus:outline-none focus:ring-2 focus:ring-[#1B4472]/10 transition-all shadow-sm"
                 />
@@ -120,17 +124,21 @@ function LoginForm() {
               {/* Password Field */}
               <div>
                 <div className="mb-1.5">
-                  <label htmlFor="password" className="mb-1.5 block text-xs font-bold text-slate-700">
+                  <label htmlFor="password" className="block text-xs font-bold text-slate-700">
                     Password
                   </label>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 bg-slate-50/50 focus-within:border-[#1B4472] focus-within:ring-2 focus-within:ring-[#1B4472]/10 transition-all shadow-sm [&_input]:rounded-xl">
-                  <PasswordInput
+                {/* Password input replaced with standard type="password" to remove the eye icon */}
+                <div>
+                  <input
                     id="password"
+                    type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
                     required
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#1B4472] focus:outline-none focus:ring-2 focus:ring-[#1B4472]/10 transition-all shadow-sm"
                   />
                 </div>
 
@@ -206,5 +214,6 @@ export default function StudentLoginPage() {
     </Suspense>
   );
 }
+
 
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FileText, Send, ShieldCheck, XCircle, CloudUpload, Lock, Unlock } from "lucide-react";
+import { FileText, Send, XCircle, CloudUpload, Lock, BookOpen, ArrowRight } from "lucide-react";
 import { StudentNav } from "@/components/layout/StudentNav";
 import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
@@ -95,25 +95,27 @@ export default function InternshipStatusPage() {
 
   const timeline = useMemo(
     () => [
-      { label: "Placement Search", subLabel: statusIsSubmitted || statusIsApproved ? "Completed" : "In Progress", active: true },
-      { label: "Pending Approval", subLabel: statusIsApproved ? "Verified" : statusIsSubmitted ? "Awaiting department verification" : "Awaiting submission", active: statusIsSubmitted || statusIsApproved },
-      { label: "Approved", subLabel: "Ready to access Record Book upon approval", active: statusIsApproved },
+      {
+        label: "Placement Search",
+        subLabel: statusIsSubmitted || statusIsApproved ? "Completed" : "In Progress",
+        active: true,
+        isCompleted: true,
+      },
+      {
+        label: "Pending Approval",
+        subLabel: statusIsApproved ? "Verified" : statusIsSubmitted ? "Awaiting department verification" : "Awaiting submission",
+        active: statusIsSubmitted || statusIsApproved,
+        isCompleted: statusIsApproved,
+      },
+      {
+        label: "Approved",
+        subLabel: "Ready to access Record Book upon approval",
+        active: statusIsApproved,
+        isCompleted: statusIsApproved,
+      },
     ],
     [statusIsSubmitted, statusIsApproved],
   );
-
-  const resetForm = () => {
-    setCompanyName("");
-    setJobPosition("");
-    setInternshipStartDate("");
-    setDuration("");
-    setOfferFileName("");
-    setOfferMimeType("");
-    setOfferDataUrl("");
-    setSubmitted(false);
-    setApproved(false);
-    setValidationError("");
-  };
 
   const saveStatus = (next: InternshipStatusData) => {
     if (!user || user.role !== "student") return;
@@ -188,30 +190,6 @@ export default function InternshipStatusPage() {
     }
   };
 
-  const approvePlacement = async () => {
-    if (!applicationId) return;
-    try {
-      const token = sessionStorage.getItem("ims.student.token");
-      const res = await fetch(`http://localhost:5000/api/internships/${applicationId}/review`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ approved: true }),
-      });
-      if (res.ok) {
-        setApproved(true);
-        setRejectionReason("");
-        setToastMessage("Department approved your placement.");
-        window.setTimeout(() => setToastMessage(""), 3000);
-        fetchStatus();
-      }
-    } catch {
-      setValidationError("Unable to connect to backend server.");
-    }
-  };
-
   const downloadOffer = () => {
     if (!offerDataUrl || !offerFileName) return;
     const link = document.createElement("a");
@@ -232,7 +210,7 @@ export default function InternshipStatusPage() {
 
   if (!ready || !user) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#b2d3e6] text-[#0f2d59]">
+      <main className="flex min-h-screen items-center justify-center bg-[#D4E9FC] text-[#3F5D82]">
         Loading…
       </main>
     );
@@ -243,25 +221,46 @@ export default function InternshipStatusPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#b2d3e6]">
+    <div className="flex min-h-screen flex-col bg-[#D4E9FC]">
       <StudentNav />
       
-      <main className="flex-1">
+      <main className="flex-1 min-h-screen pb-16 relative overflow-hidden bg-[#9bc6d9]">
         <div className="mx-auto max-w-7xl px-6 py-8">
           
           {/* Header Section */}
           <div className="mb-8">
-            <h1 className="text-xl font-bold text-[#0f2d59]">
+            <h1 className="mt-1 text-3xl font-extrabold text-[#0B2545]">
               Internship Placement Tracking
             </h1>
-            <p className="mt-2 max-w-4xl text-sm text-[#0f2d59]/80 leading-relaxed font-semibold">
-              Only students who have been selected for an internship are eligible to complete and submit this form. If you have secured a placement, please provide the details below for department verification.
-            </p>
+
+            <div className="mt-3 rounded-xl bg-[#3F5D82]/10 border border-[#3F5D82]/20 px-5 py-3">
+              <p className="text-sm font-semibold text-[#1B4472]">
+                Only students who have been selected for an internship are eligible to complete and submit this form. If you have secured a placement, please provide the details below for department verification.
+              </p>
+            </div>
           </div>
 
           {toastMessage ? (
             <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 shadow-sm">
               {toastMessage}
+            </div>
+          ) : null}
+
+          {statusIsApproved ? (
+            <div className="mb-6 flex items-center justify-between rounded-xl border border-emerald-500/30 bg-[#0B2545] px-5 py-4 text-emerald-400 shadow-lg shadow-emerald-950/20 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                  <BookOpen className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-white tracking-wide">
+                    Internship Approved
+                  </p>
+                  <p className="text-xs text-emerald-300/80 mt-0.5">
+                    Your internship has been verified. You can now update your Record Book.
+                  </p>
+                </div>
+              </div>
             </div>
           ) : null}
 
@@ -289,7 +288,7 @@ export default function InternshipStatusPage() {
               <div className={`overflow-hidden rounded-xl bg-[#c5dfee] shadow-sm transition-opacity duration-300 ${isFormLocked ? "opacity-75" : "opacity-100"}`}>
                 
                 {/* Form Banner Header */}
-                <div className={`flex items-center justify-between px-5 py-4 text-white transition-colors duration-300 ${isFormLocked ? "bg-gray-500" : "bg-[#1e467a]"}`}>
+                <div className={`flex items-center justify-between px-5 py-4 text-white transition-colors duration-300 ${isFormLocked ? "bg-gray-500" : "bg-[#3F5D82]"}`}>
                   <div className="flex items-center gap-3">
                     <FileText className="h-5 w-5" />
                     <span className="text-sm font-semibold tracking-wide">Formalize Your Offer</span>
@@ -310,7 +309,7 @@ export default function InternshipStatusPage() {
                     <div className="space-y-5">
                       <div className="grid gap-6 sm:grid-cols-2">
                         <label className="block">
-                          <span className={`text-xs font-bold ${isFormLocked ? "text-[#0f2d59]/60" : "text-[#0f2d59]"}`}>Company Name <span className="text-rose-500">*</span></span>
+                          <span className={`text-xs font-bold ${isFormLocked ? "text-[#3F5D82]/60" : "text-[#3F5D82]"}`}>Company Name <span className="text-rose-500">*</span></span>
                           <input
                             disabled={isFormLocked}
                             value={companyName}
@@ -320,7 +319,7 @@ export default function InternshipStatusPage() {
                           />
                         </label>
                         <label className="block">
-                          <span className={`text-xs font-bold ${isFormLocked ? "text-[#0f2d59]/60" : "text-[#0f2d59]"}`}>Job Position <span className="text-rose-500">*</span></span>
+                          <span className={`text-xs font-bold ${isFormLocked ? "text-[#3F5D82]/60" : "text-[#3F5D82]"}`}>Job Position <span className="text-rose-500">*</span></span>
                           <input
                             disabled={isFormLocked}
                             value={jobPosition}
@@ -334,7 +333,7 @@ export default function InternshipStatusPage() {
                       {/* Internship Start Date & Duration Section */}
                       <div className="grid gap-6 sm:grid-cols-2">
                         <label className="block">
-                          <span className={`text-xs font-bold ${isFormLocked ? "text-[#0f2d59]/60" : "text-[#0f2d59]"}`}>Internship Start Date <span className="text-rose-500">*</span></span>
+                          <span className={`text-xs font-bold ${isFormLocked ? "text-[#3F5D82]/60" : "text-[#3F5D82]"}`}>Internship Start Date <span className="text-rose-500">*</span></span>
                           <input
                             type="date"
                             disabled={isFormLocked}
@@ -344,7 +343,7 @@ export default function InternshipStatusPage() {
                           />
                         </label>
                         <label className="block">
-                          <span className={`text-xs font-bold ${isFormLocked ? "text-[#0f2d59]/60" : "text-[#0f2d59]"}`}>Duration (e.g., 6 Months) <span className="text-rose-500">*</span></span>
+                          <span className={`text-xs font-bold ${isFormLocked ? "text-[#3F5D82]/60" : "text-[#3F5D82]"}`}>Duration (e.g., 6 Months) <span className="text-rose-500">*</span></span>
                           <input
                             disabled={isFormLocked}
                             value={duration}
@@ -356,16 +355,16 @@ export default function InternshipStatusPage() {
                       </div>
 
                       {/* Drag and Drop Zone */}
-                      <label className={`block rounded-xl border-2 border-dashed px-6 py-10 text-center transition ${isFormLocked ? "border-gray-400/40 bg-gray-200/40 cursor-not-allowed" : "border-[#0f2d59]/30 bg-[#b2d3e6]/40 cursor-pointer hover:bg-[#b2d3e6]/60"}`}>
-                        <div className={`mx-auto flex h-10 w-10 items-center justify-center rounded-lg text-white ${isFormLocked ? "bg-gray-400" : "bg-[#1e467a]"}`}>
+                      <label className={`block rounded-xl border-2 border-dashed px-6 py-10 text-center transition ${isFormLocked ? "border-gray-400/40 bg-gray-200/40 cursor-not-allowed" : "border-[#3F5D82]/30 bg-[#D4E9FC]/40 cursor-pointer hover:bg-[#D4E9FC]/60"}`}>
+                        <div className={`mx-auto flex h-10 w-10 items-center justify-center rounded-lg text-white ${isFormLocked ? "bg-gray-400" : "bg-[#3F5D82]"}`}>
                           <CloudUpload className="h-5 w-5" />
                         </div>
-                        <p className={`mt-4 text-sm font-bold ${isFormLocked ? "text-gray-400" : "text-[#0f2d59]"}`}>Drag and drop your offer letter here</p>
-                        <p className={`mt-1 text-xs ${isFormLocked ? "text-gray-400/80" : "text-[#0f2d59]/70"}`}>or click to browse from your computer</p>
-                        <p className={`mt-1 text-[11px] font-medium ${isFormLocked ? "text-gray-400/60" : "text-[#0f2d59]/60"}`}>PDF, MAX 5MB</p>
+                        <p className={`mt-4 text-sm font-bold ${isFormLocked ? "text-gray-400" : "text-[#3F5D82]"}`}>Drag and drop your offer letter here</p>
+                        <p className={`mt-1 text-xs ${isFormLocked ? "text-gray-400/80" : "text-[#3F5D82]/70"}`}>or click to browse from your computer</p>
+                        <p className={`mt-1 text-[11px] font-medium ${isFormLocked ? "text-gray-400/60" : "text-[#3F5D82]/60"}`}>PDF, MAX 5MB</p>
                         
                         {offerFileName ? (
-                          <p className="mx-auto mt-3 max-w-xs rounded bg-white px-3 py-1.5 text-xs font-medium text-[#0f2d59] shadow-sm truncate">
+                          <p className="mx-auto mt-3 max-w-xs rounded bg-white px-3 py-1.5 text-xs font-medium text-[#3F5D82] shadow-sm truncate">
                             {offerFileName}
                           </p>
                         ) : null}
@@ -386,8 +385,8 @@ export default function InternshipStatusPage() {
                       ) : null}
 
                       {/* Bottom Bar: Disclaimer & Action Button */}
-                      <div className="pt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-t border-[#0f2d59]/10">
-                        <p className="text-[11px] text-[#0f2d59]/70 italic max-w-md">
+                      <div className="pt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-t border-[#3F5D82]/10">
+                        <p className="text-[11px] text-[#3F5D82]/70 italic max-w-md">
                           By submitting, you agree that the provided information is accurate for the formal internship validation process.
                         </p>
                         
@@ -395,7 +394,7 @@ export default function InternshipStatusPage() {
                           type="button"
                           onClick={submitApplication}
                           disabled={!canSubmit}
-                          className="inline-flex items-center justify-center gap-2 rounded bg-[#1e467a] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#0f2d59] disabled:cursor-not-allowed disabled:opacity-50 self-end sm:self-auto"
+                          className="inline-flex items-center justify-center gap-2 rounded bg-[#3F5D82] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#2F5F98] disabled:cursor-not-allowed disabled:opacity-50 self-end sm:self-auto"
                         >
                           <Send className="h-3.5 w-3.5" />
                           Submit for Review
@@ -404,16 +403,16 @@ export default function InternshipStatusPage() {
                     </div>
                   ) : (
                     /* Submitted View Actions */
-                    <div className="rounded-xl border border-[#0f2d59]/10 bg-white/60 p-5">
-                      <p className="text-sm font-bold text-[#0f2d59]">Offer letter submitted</p>
-                      <p className="mt-2 text-xs text-[#0f2d59]/80 leading-relaxed">
+                    <div className="rounded-xl border border-[#3F5D82]/10 bg-white/60 p-5">
+                      <p className="text-sm font-bold text-[#3F5D82]">Offer letter submitted</p>
+                      <p className="mt-2 text-xs text-[#3F5D82]/80 leading-relaxed">
                         Your company details and offer letter are now waiting for departmental verification. Track progress in the right panel.
                       </p>
-                      <div className="mt-4 flex flex-wrap gap-3">
+                      <div className="mt-4 flex flex-wrap gap-3 items-center">
                         <button
                           type="button"
                           onClick={downloadOffer}
-                          className="inline-flex items-center gap-2 rounded bg-white px-4 py-2 text-xs font-bold text-[#0f2d59] shadow-sm hover:bg-gray-50"
+                          className="inline-flex items-center gap-2 rounded bg-white px-4 py-2 text-xs font-bold text-[#3F5D82] shadow-sm hover:bg-gray-50"
                         >
                           <FileText className="h-3.5 w-3.5" />
                           Download offer letter
@@ -422,11 +421,23 @@ export default function InternshipStatusPage() {
                           <button
                             type="button"
                             onClick={() => router.push("/student/record-book")}
-                            className="inline-flex items-center gap-2 rounded bg-[#0f2d59] px-4 py-2 text-xs font-bold text-white hover:bg-[#1e467a]"
+                            className="inline-flex items-center gap-2.5 rounded-xl bg-[#0B2545] px-6 py-3.5 text-sm font-extrabold text-white shadow-xl transition-all duration-200 hover:bg-[#071322] hover:-translate-y-0.5 hover:shadow-2xl active:translate-y-0"
                           >
+                            <BookOpen className="h-4 w-4" />
+                            Go to Record Book
+                            <ArrowRight className="h-4 w-4" />
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled
+                            className="inline-flex items-center gap-2.5 rounded-lg bg-[#0B2545] text-white px-5 py-3 text-sm font-bold opacity-60 cursor-not-allowed shadow-none hover:bg-[#0B2545]"
+                            title="Pending department approval"
+                          >
+                            <Lock className="h-4 w-4 text-white" />
                             Go to Record Book
                           </button>
-                        ) : null}
+                        )}
                       </div>
                     </div>
                   )}
@@ -435,28 +446,37 @@ export default function InternshipStatusPage() {
             </div>
 
             {/* Right Column: Your Progress Timeline */}
-            <aside className="rounded-xl bg-[#c5dfee] p-5 self-start">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#0f2d59]">
+            <aside className="rounded-xl bg-[#3F5D82] p-5 self-start">
+              <p className="text-xs font-bold uppercase tracking-wider text-white">
                 Your Progress
               </p>
               
-              <div className="mt-6 relative border-l-2 border-[#0f2d59]/20 pl-5 space-y-6">
-                {timeline.map((item) => (
-                  <div key={item.label} className="relative">
-                    {/* Circle Indicator on the line */}
-                    <div
-                      className={`absolute -left-[27px] top-0.5 h-3 w-3 rounded-full border-2 bg-white ${
-                        item.active ? "border-emerald-500 bg-emerald-500" : "border-gray-400"
-                      }`}
-                    />
-                    <div>
-                      <p className="text-xs font-bold text-[#0f2d59]">{item.label}</p>
-                      <p className="text-[11px] text-[#0f2d59]/70 mt-0.5">
-                        {item.subLabel}
-                      </p>
+              <div className="mt-6 relative border-l-2 border-white/30 pl-5 space-y-6">
+                {timeline.map((item, index) => {
+                  const isFinalStep = index === timeline.length - 1;
+                  const useGreen = isFinalStep && item.isCompleted;
+
+                  return (
+                    <div key={item.label} className="relative">
+                      {/* Circle Indicator on the line */}
+                      <div
+                        className={`absolute -left-[27px] top-0.5 h-3 w-3 rounded-full border-2 ${
+                          useGreen
+                            ? "border-emerald-400 bg-emerald-400"
+                            : item.active
+                            ? "border-white bg-white"
+                            : "border-white/40 bg-transparent"
+                        }`}
+                      />
+                      <div>
+                        <p className="text-xs font-bold text-white">{item.label}</p>
+                        <p className="text-[11px] text-white/70 mt-0.5">
+                          {item.subLabel}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </aside>
 
