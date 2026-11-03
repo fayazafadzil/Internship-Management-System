@@ -66,9 +66,9 @@ IMS/
 
 ### Prerequisites
 Before you start, make sure you have the following installed:
-- [Node.js](https://nodejs.org/) (v18.x or above recommended)
+- [Node.js](https://nodejs.org/)  (v20.9.0 or later)
 - [MongoDB](https://www.mongodb.com/try/download/community) (running locally or a MongoDB Atlas connection URI)
-- Git (optional)
+- [Git](https://git-scm.com/) (optional, for cloning the repository)
 
 ---
 
@@ -116,9 +116,7 @@ From the `backend/` folder:
    ```bash
    npm run dev
    ```
-*Note: On first startup, the backend automatically connects to MongoDB and seeds:*
-- *Default Department Administrator account: **`department@ruh.ac.lk`** / **`Admin@12345`***
-- *Standard Course Subjects database.*
+*Note: The backend connects to MongoDB during startup. If your project includes automatic database seeding, the required initial data and administrator account may be created during this process.*
 
 ---
 
@@ -139,12 +137,14 @@ Open a new terminal window, navigate to the `frontend/` directory:
 
 ## 🔐 Credentials for Testing
 
-- **Department Account** (Auto-seeded):
-  - **Email**: `department@ruh.ac.lk`
-  - **Password**: `Admin@12345`
+- **Department Account**:
+
+     Use the department administrator account configured in the development    environment.
+Do not publish default administrator passwords or private login credentials in this repository.
 
 - **Student Accounts**:
-  - Register a new student under the Student Portal or use an approved test student credentials to experience the Record Book & GPA verification workflows.
+  Register a new student through the Student Portal.
+Access the system after the account registration and verification process has been completed.
 
 ---
 
